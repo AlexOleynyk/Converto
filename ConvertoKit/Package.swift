@@ -21,6 +21,9 @@ let package = Package(
             dependencies: [
                 "ConvertoKit",
                 "SnapshotTesting"
-            ]),
+            ],
+            exclude: [
+                "ViewTests/__Snapshots__/"
+            ])
     ]
 )
