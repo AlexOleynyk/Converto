@@ -33,6 +33,7 @@ public final class MoneyField: UIControl {
             inputField.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         inputField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        inputField.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         currencyContainerView.addSubview(currencyLabel, constraints: [
             currencyLabel.leadingAnchor.constraint(equalTo: currencyContainerView.leadingAnchor, constant: 10),
@@ -56,6 +57,7 @@ public final class MoneyField: UIControl {
         ])
         
         currencyLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        currencyContainerView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onCurrencyTap))
         currencyContainerView.addGestureRecognizer(tapRecognizer)

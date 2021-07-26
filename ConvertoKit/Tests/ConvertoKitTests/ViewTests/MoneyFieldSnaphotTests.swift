@@ -12,5 +12,5 @@ final class MoneyFieldSnaphotTests: XCTestCase {
     func testMoneyField_default() {
         assertSnapshot(matching: ContainerView(moneyField), as: .image(size: ContainerView.defaultSize, traits: .lightMode))
         assertSnapshot(matching: ContainerView(moneyField), as: .image(size: ContainerView.defaultSize, traits: .darkMode))
-    }   
+    }
 }

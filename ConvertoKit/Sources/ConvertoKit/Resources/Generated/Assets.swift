@@ -25,6 +25,7 @@ public enum Asset {
     public static let background = ColorAsset(name: "background")
     public static let blue200 = ColorAsset(name: "blue-200")
     public static let blue500 = ColorAsset(name: "blue-500")
+    public static let gray700 = ColorAsset(name: "gray-700")
     public static let gray900 = ColorAsset(name: "gray-900")
   }
   public enum Icons {
