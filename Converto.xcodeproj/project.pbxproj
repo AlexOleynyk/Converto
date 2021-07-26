@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		2900350626AE8E360068DC90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2900350426AE8E360068DC90 /* Main.storyboard */; };
 		2900350826AE8E370068DC90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2900350726AE8E370068DC90 /* Assets.xcassets */; };
 		2900350B26AE8E370068DC90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2900350926AE8E370068DC90 /* LaunchScreen.storyboard */; };
+		2900351426AEA0510068DC90 /* ConvertoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2900351326AEA0510068DC90 /* ConvertoKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2900351426AEA0510068DC90 /* ConvertoKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +44,7 @@
 			children = (
 				290034FD26AE8E360068DC90 /* Converto */,
 				290034FC26AE8E360068DC90 /* Products */,
+				2900351226AEA0510068DC90 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +70,13 @@
 			path = Converto;
 			sourceTree = "<group>";
 		};
+		2900351226AEA0510068DC90 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,6 +84,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2900350F26AE8E370068DC90 /* Build configuration list for PBXNativeTarget "Converto" */;
 			buildPhases = (
+				2900351526AEA0880068DC90 /* ShellScript */,
 				290034F726AE8E360068DC90 /* Sources */,
 				290034F826AE8E360068DC90 /* Frameworks */,
 				290034F926AE8E360068DC90 /* Resources */,
@@ -83,6 +94,9 @@
 			dependencies = (
 			);
 			name = Converto;
+			packageProductDependencies = (
+				2900351326AEA0510068DC90 /* ConvertoKit */,
+			);
 			productName = Converto;
 			productReference = 290034FB26AE8E360068DC90 /* Converto.app */;
 			productType = "com.apple.product-type.application";
@@ -131,6 +145,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2900351526AEA0880068DC90 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PROJECT_DIR}/BuildTools/swiftgen/bin/swiftgen config run --config ${PROJECT_DIR}/BuildTools/ConvertoKit-swiftgen.yml\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		290034F726AE8E360068DC90 /* Sources */ = {
@@ -339,6 +373,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2900351326AEA0510068DC90 /* ConvertoKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConvertoKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 290034F326AE8E360068DC90 /* Project object */;
 }
