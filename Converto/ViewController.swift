@@ -3,24 +3,23 @@ import ConvertoKit
 
 class ViewController: UIViewController {
     
-    let button = PrimaryButton()
+    let field = MoneyField()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        button.setTitle("test", for: [])
-        view.addSubview(button, constraints: [
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        
+        view.addSubview(field, constraints: [
+            field.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            field.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            field.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
-        
-        
-        button.addTarget(self, action: #selector(toogleLoading), for: .primaryActionTriggered)
+        field.addTarget(self, action: #selector(toogleLoading), for: .touchUpInside)
     }
 
     @objc private func toogleLoading() {
-        button.isLoading.toggle()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [button] in
-            button.isLoading.toggle()
+        field.currencyLabel.text = "USD"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [field] in
+            field.currencyLabel.text = "EUR"
         }
     }
 }

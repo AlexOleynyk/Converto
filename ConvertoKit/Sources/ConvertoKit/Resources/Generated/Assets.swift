@@ -28,6 +28,7 @@ public enum Asset {
     public static let gray900 = ColorAsset(name: "gray-900")
   }
   public enum Icons {
+    public static let chevronDown = ImageAsset(name: "chevron-down")
     public static let sellArrow = ImageAsset(name: "sell-arrow")
   }
 }

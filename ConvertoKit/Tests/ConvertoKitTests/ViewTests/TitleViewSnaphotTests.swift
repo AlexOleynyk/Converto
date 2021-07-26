@@ -4,11 +4,6 @@ import XCTest
 
 final class TitleViewSnaphotTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        isRecording = true
-    }
-    
     private let titleView = setup(TitleView()) {
         $0.iconView.image = Asset.Icons.sellArrow.image
         $0.titleLabel.text = "Sell"
