@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  Converto
-//
-//  Created by alex.oleynyk on 26.07.2021.
-//
-
 import UIKit
 import ConvertoKit
 
@@ -19,9 +12,16 @@ class ViewController: UIViewController {
             button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-        // Do any additional setup after loading the view.
+        
+        
+        button.addTarget(self, action: #selector(toogleLoading), for: .primaryActionTriggered)
     }
 
-
+    @objc private func toogleLoading() {
+        button.isLoading.toggle()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [button] in
+            button.isLoading.toggle()
+        }
+    }
 }
 

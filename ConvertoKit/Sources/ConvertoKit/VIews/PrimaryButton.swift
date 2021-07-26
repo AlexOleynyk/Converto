@@ -1,11 +1,51 @@
 import UIKit
 
-public class PrimaryButton: UIButton {
+public final class PrimaryButton: UIButton {
+    
+    public var isLoading: Bool = false {
+        didSet { updateAppearance() }
+    }
+    
+    private let loadingIndicator = setup(UIActivityIndicatorView()) {
+        $0.color = Asset.Colors.blue200.color
+    }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .gray
-        setImage(Asset.Icons.sellArrow.image, for: [])
+        backgroundColor = Asset.Colors.blue500.color
+        titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        setTitleColor(Asset.Colors.blue200.color, for: [])
+        contentEdgeInsets = .init(top: 16, left: 16, bottom: 16, right: 16)
+        layer.cornerRadius = 8
+
+        addSubview(loadingIndicator, constraints: [
+            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ])
+        
+        updateAppearance()
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        updateSubviews()
+    }
+    
+    public override var isUserInteractionEnabled: Bool {
+        get { super.isUserInteractionEnabled && isLoading == false }
+        set { super.isUserInteractionEnabled = newValue }
+    }
+    
+    private func updateAppearance() {
+        isLoading
+            ? loadingIndicator.startAnimating()
+            : loadingIndicator.stopAnimating()
+        updateSubviews()
+    }
+    
+    private func updateSubviews() {
+        titleLabel?.isHidden = isLoading
+        imageView?.isHidden = isLoading
     }
     
     @available(*, unavailable)

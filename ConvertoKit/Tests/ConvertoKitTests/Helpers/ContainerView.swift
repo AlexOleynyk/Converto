@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import ConvertoKit
 
 public class ContainerView: UIView {
     public static var highSize = CGSize(width: 400, height: 600)
@@ -8,7 +9,7 @@ public class ContainerView: UIView {
 
     init(_ wrapped: UIView) {
         super.init(frame: .zero)
-        backgroundColor = .lightGray//Asset.Colors.grey100.color
+        backgroundColor = Asset.Colors.background.color
         addSubview(wrapped, constraints: [
             wrapped.centerYAnchor.constraint(equalTo: centerYAnchor),
             wrapped.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
