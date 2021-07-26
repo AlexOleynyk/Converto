@@ -2,7 +2,7 @@
 import SnapshotTesting
 import XCTest
 
-final class TitleViewSnaphotTests: XCTestCase {
+final class TitleViewSnapshotTests: XCTestCase {
     
     private let titleView = setup(TitleView()) {
         $0.iconView.image = Asset.Icons.sellArrow.image

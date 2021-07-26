@@ -2,7 +2,7 @@
 import SnapshotTesting
 import XCTest
 
-final class MoneyFieldSnaphotTests: XCTestCase {
+final class MoneyFieldSnapshotTests: XCTestCase {
     
     private let moneyField = setup(MoneyField()) {
         $0.inputField.text = "100.00"
