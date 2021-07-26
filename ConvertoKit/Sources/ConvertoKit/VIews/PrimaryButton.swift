@@ -7,14 +7,14 @@ public final class PrimaryButton: UIButton {
     }
     
     private let loadingIndicator = setup(UIActivityIndicatorView()) {
-        $0.color = Asset.Colors.blue200.color
+            $0.color = Asset.Colors.fixedBlue200
     }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = Asset.Colors.blue500.color
         titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        setTitleColor(Asset.Colors.blue200.color, for: [])
+        setTitleColor(Asset.Colors.fixedBlue200, for: [])
         contentEdgeInsets = .init(top: 16, left: 16, bottom: 16, right: 16)
         layer.cornerRadius = 8
 
@@ -52,4 +52,8 @@ public final class PrimaryButton: UIButton {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+private extension Asset.Colors {
+    static let fixedBlue200 = blue200.fixedToUserInterfaceStyle(.light)
 }

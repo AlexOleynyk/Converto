@@ -4,11 +4,6 @@ import XCTest
 
 final class PrimaryButtonSnapshotTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        isRecording = true
-    }
-    
     private let primaryButton = setup(PrimaryButton()) {
         $0.setTitle("Exchange", for: [])
     }
