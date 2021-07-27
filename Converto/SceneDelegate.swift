@@ -7,7 +7,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private lazy var countFetcher = UpdatableCountFetcher()
 
     private lazy var rootController = UINavigationController(
-        rootViewController: ViewController(
+        rootViewController: ConvertorViewController(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
                 countFetcher: countFetcher,

@@ -1,7 +1,7 @@
 import UIKit
 import ConvertoKit
 
-final class ViewController: UIViewController {    
+final class ConvertorViewController: UIViewController {    
     let convertorView = ConvertorView()
     
     let getBalanceUseCase: GetUserBalancesUseCase

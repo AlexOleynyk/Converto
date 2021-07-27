@@ -69,11 +69,10 @@
 		290034FD26AE8E360068DC90 /* Converto */ = {
 			isa = PBXGroup;
 			children = (
+				2900352526B03CF30068DC90 /* ConvertorScreen */,
 				2900351626AFEF930068DC90 /* Domain */,
 				290034FE26AE8E360068DC90 /* AppDelegate.swift */,
 				2900350026AE8E360068DC90 /* SceneDelegate.swift */,
-				2900350226AE8E360068DC90 /* ViewController.swift */,
-				2900351926AFF1380068DC90 /* ConvertorView.swift */,
 				2900350726AE8E370068DC90 /* Assets.xcassets */,
 				2900350926AE8E370068DC90 /* LaunchScreen.storyboard */,
 				2900350C26AE8E370068DC90 /* Info.plist */,
@@ -98,6 +97,15 @@
 				2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */,
 			);
 			path = Domain;
+			sourceTree = "<group>";
+		};
+		2900352526B03CF30068DC90 /* ConvertorScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2900350226AE8E360068DC90 /* ViewController.swift */,
+				2900351926AFF1380068DC90 /* ConvertorView.swift */,
+			);
+			path = ConvertorScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
