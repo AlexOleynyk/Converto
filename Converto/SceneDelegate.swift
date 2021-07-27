@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  Converto
-//
-//  Created by alex.oleynyk on 26.07.2021.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -21,10 +14,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 freeLimitCount: 5,
                 decoratee: PercentBasedGetExchangeFeeUseCase(percent: 0.007)
             ),
-            exchangeMoneyUseCase: ObservingExchangeMoneyUseCaseDecorator(decoratee: ExchangeMoneyUseCaseImpl(userWalletRepository: userWalletRepository, bankWalletRepository: BankWalletRepository())) { [weak self] in
-                if $0 { self?.countFetcher.increaseCount()}
-            },
-            getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(exchangeRateFetcher: MockExchangeRateFetcher())
+            exchangeMoneyUseCase: ObservingExchangeMoneyUseCaseDecorator(
+                decoratee: ExchangeMoneyUseCaseImpl(
+                    userWalletRepository: userWalletRepository,
+                    bankWalletRepository: BankWalletRepository()
+                )
+            ) { [weak self] in if $0 { self?.countFetcher.increaseCount()} },
+            getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
+                exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
+                    decoratee: RemoteRateFetcher()
+                )
+            )
         )
     )
 
@@ -49,7 +49,6 @@ private class UserWalletRepository: WalletRepository, UserBalanceFetcher {
         Balance(id: 2, money: Money(amount: 100, currency: Currency(id: 2, code: "EUR")))
     ])
 
-    
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.mockWallet = wallet
@@ -117,9 +116,52 @@ private class UpdatableCountFetcher: TransactionCountFetcher {
     }
 }
 
-// TODO: Add real API call for this one
-private class MockExchangeRateFetcher: ExchangeRateFetcher {
+private class CachingExchangeRateFetcherDecorator: ExchangeRateFetcher {
+    
+    private var cache: [String:Decimal] = [:]
+    private let decoratee: ExchangeRateFetcher
+    
+    init(decoratee: ExchangeRateFetcher) {
+        self.decoratee = decoratee
+    }
+    
     func get(sourceMoney: Money, targetMoney: Money, completion: @escaping (Decimal) -> Void) {
-        completion(1.2)
+        if let rate =  cache[sourceMoney.currency.code + targetMoney.currency.code] {
+            return completion(rate)
+        }
+        decoratee.get(sourceMoney: sourceMoney, targetMoney: targetMoney) { [weak self] rate in
+            self?.cache[sourceMoney.currency.code + targetMoney.currency.code] = rate
+            completion(rate)
+        }
     }
 }
+
+private class RemoteRateFetcher: ExchangeRateFetcher {
+    func get(sourceMoney: Money, targetMoney: Money, completion: @escaping (Decimal) -> Void) {
+        var components = URLComponents()
+        components.scheme = "http"
+        components.host = "api.evp.lt"
+        components.path = "/currency/commercial/exchange/1-\(sourceMoney.currency.code)/\(targetMoney.currency.code)/latest"
+        guard let url = components.url else { return completion(1) }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard error == nil,
+                  let data = data,
+                  let result = try? JSONDecoder().decode(RateResponseDTO.self, from: data) else {
+                return DispatchQueue.main.async {
+                    completion(1)
+                }
+            }
+            DispatchQueue.main.async {
+                completion(Decimal(string: result.amount) ?? 1)                
+            }
+                
+        }
+        task.resume()
+    }
+    
+    private struct RateResponseDTO: Decodable {
+        let amount: String
+    }
+}
+
