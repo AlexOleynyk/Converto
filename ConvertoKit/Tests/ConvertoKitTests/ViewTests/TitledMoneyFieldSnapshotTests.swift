@@ -16,4 +16,11 @@ final class TitledMoneyFieldSnapshotTests: XCTestCase {
         assertSnapshot(matching: ContainerView(moneyField), as: .image(size: ContainerView.defaultSize, traits: .lightMode))
         assertSnapshot(matching: ContainerView(moneyField), as: .image(size: ContainerView.defaultSize, traits: .darkMode))
     }
+    
+    func testTitledMoneyField_longAmounttext() {
+        isRecording = true
+        moneyField.moneyField.inputField.text = "Very long text here, really long. It is not a joke"
+        assertSnapshot(matching: ContainerView(moneyField), as: .image(size: ContainerView.defaultSize, traits: .lightMode))
+        assertSnapshot(matching: ContainerView(moneyField), as: .image(size: ContainerView.defaultSize, traits: .darkMode))
+    }
 }

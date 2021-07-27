@@ -10,7 +10,6 @@
 		290034FF26AE8E360068DC90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290034FE26AE8E360068DC90 /* AppDelegate.swift */; };
 		2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900350026AE8E360068DC90 /* SceneDelegate.swift */; };
 		2900350326AE8E360068DC90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900350226AE8E360068DC90 /* ViewController.swift */; };
-		2900350626AE8E360068DC90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2900350426AE8E360068DC90 /* Main.storyboard */; };
 		2900350826AE8E370068DC90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2900350726AE8E370068DC90 /* Assets.xcassets */; };
 		2900350B26AE8E370068DC90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2900350926AE8E370068DC90 /* LaunchScreen.storyboard */; };
 		2900351426AEA0510068DC90 /* ConvertoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2900351326AEA0510068DC90 /* ConvertoKit */; };
@@ -21,7 +20,6 @@
 		290034FE26AE8E360068DC90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2900350026AE8E360068DC90 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2900350226AE8E360068DC90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2900350526AE8E360068DC90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2900350726AE8E370068DC90 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2900350A26AE8E370068DC90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2900350C26AE8E370068DC90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -62,7 +60,6 @@
 				290034FE26AE8E360068DC90 /* AppDelegate.swift */,
 				2900350026AE8E360068DC90 /* SceneDelegate.swift */,
 				2900350226AE8E360068DC90 /* ViewController.swift */,
-				2900350426AE8E360068DC90 /* Main.storyboard */,
 				2900350726AE8E370068DC90 /* Assets.xcassets */,
 				2900350926AE8E370068DC90 /* LaunchScreen.storyboard */,
 				2900350C26AE8E370068DC90 /* Info.plist */,
@@ -140,7 +137,6 @@
 			files = (
 				2900350B26AE8E370068DC90 /* LaunchScreen.storyboard in Resources */,
 				2900350826AE8E370068DC90 /* Assets.xcassets in Resources */,
-				2900350626AE8E360068DC90 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,14 +176,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		2900350426AE8E360068DC90 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2900350526AE8E360068DC90 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2900350926AE8E370068DC90 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -321,6 +309,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J3BUYMYL37;
 				INFOPLIST_FILE = Converto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -329,7 +318,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.oleynyk.Converto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -339,6 +328,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J3BUYMYL37;
 				INFOPLIST_FILE = Converto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -347,7 +337,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.oleynyk.Converto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
