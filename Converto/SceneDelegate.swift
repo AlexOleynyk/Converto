@@ -11,15 +11,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     private lazy var userWalletRepository = UserWalletRepository()
+    private lazy var countFetcher = UpdatableCountFetcher()
+
     private lazy var rootController = UINavigationController(
         rootViewController: ViewController(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
-                countFetcher: SingleValueCountFetcher(),
+                countFetcher: countFetcher,
                 freeLimitCount: 5,
                 decoratee: PercentBasedGetExchangeFeeUseCase(percent: 0.007)
             ),
-            exchangeMoneyUseCase: ExchangeMoneyUseCaseImpl(userWalletRepository: userWalletRepository, bankWalletRepository: BankWalletRepository()),
+            exchangeMoneyUseCase: ObservingExchangeMoneyUseCaseDecorator(decoratee: ExchangeMoneyUseCaseImpl(userWalletRepository: userWalletRepository, bankWalletRepository: BankWalletRepository())) { [weak self] in
+                if $0 { self?.countFetcher.increaseCount()}
+            },
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(exchangeRateFetcher: MockExchangeRateFetcher())
         )
     )
@@ -47,14 +51,14 @@ private class UserWalletRepository: WalletRepository, UserBalanceFetcher {
 
     
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.mockWallet = wallet
             completion(true)
         }
     }
     
     func fetchWallet(completion: @escaping (Wallet) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             completion(self.mockWallet)
         }
     }
@@ -80,13 +84,40 @@ private class BankWalletRepository: WalletRepository {
     }
 }
 
+private class ObservingExchangeMoneyUseCaseDecorator: ExchangeMoneyUseCase {
 
-private class SingleValueCountFetcher: TransactionCountFetcher {
-    func count(for balance: Balance, completion: @escaping (Int) -> Void) {
-        completion(6)
+    private let decoratee: ExchangeMoneyUseCase
+    private let callback: (Bool) -> Void
+    
+    init(
+        decoratee: ExchangeMoneyUseCase,
+        callback: @escaping (Bool) -> Void
+    ) {
+        self.decoratee = decoratee
+        self.callback = callback
+    }
+    
+    func exchange(command: ExchangeMoneyCommand, completion: @escaping (Bool) -> Void) {
+        decoratee.exchange(command: command) { [weak self] result in
+            self?.callback(result)
+            completion(result)
+        }
     }
 }
 
+private class UpdatableCountFetcher: TransactionCountFetcher {
+    private var count = 0
+    
+    func increaseCount() {
+        count += 1
+    }
+    
+    func count(for balance: Balance, completion: @escaping (Int) -> Void) {
+        completion(count)
+    }
+}
+
+// TODO: Add real API call for this one
 private class MockExchangeRateFetcher: ExchangeRateFetcher {
     func get(sourceMoney: Money, targetMoney: Money, completion: @escaping (Decimal) -> Void) {
         completion(1.2)
