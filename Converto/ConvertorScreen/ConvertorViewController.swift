@@ -1,7 +1,13 @@
 import UIKit
 import ConvertoKit
 
-final class ConvertorViewController: UIViewController {    
+final class ConvertorViewController: UIViewController {
+    
+    enum CurrencySelectionType {
+        case source
+        case target
+    }
+    
     let convertorView = ConvertorView()
     
     let getBalanceUseCase: GetUserBalancesUseCase
@@ -10,6 +16,8 @@ final class ConvertorViewController: UIViewController {
     let getExchangedAmountUseCase: GetExchangedAmountUseCase
     
     var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
+    
+    var onCurrencySelectionTap: ((CurrencySelectionType, Balance) -> Void)?
 
     var sourceBalance: Balance? {
         didSet { updateSourceBalance() }
@@ -59,6 +67,8 @@ final class ConvertorViewController: UIViewController {
         
         convertorView.sourceMoneyField.moneyField.inputField.addTarget(self, action: #selector(onSourceAmountChange), for: .editingChanged)
         convertorView.convertButton.addTarget(self, action: #selector(onEchangeButtontap), for: .primaryActionTriggered)
+        convertorView.sourceMoneyField.moneyField.addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
+        convertorView.targetMoneyField.moneyField.addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
     }
     
     private func updateBalances() {
@@ -144,6 +154,12 @@ final class ConvertorViewController: UIViewController {
                 
             }
         }
+    }
+    
+    @objc private func onCurrencySelectionTap(_ moneyField: MoneyField) {
+        let type: CurrencySelectionType = moneyField == convertorView.targetMoneyField.moneyField ? .target : .source
+        guard let balance = type == .source ? sourceBalance : targetBalance else { return }
+        onCurrencySelectionTap?(type, balance)
     }
     
     private func enteredAmount() -> Decimal {

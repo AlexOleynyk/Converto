@@ -3,11 +3,18 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    private lazy var userWalletRepository = UserWalletRepository()
-    private lazy var countFetcher = UpdatableCountFetcher()
+  
 
     private lazy var rootController = UINavigationController(
-        rootViewController: ConvertorViewController(
+        rootViewController: convertorViewController
+    )
+    
+    private lazy var convertorViewController = makeConvertorViewController()
+    private lazy var userWalletRepository = UserWalletRepository()
+    
+    private func makeConvertorViewController() -> ConvertorViewController {
+        let countFetcher = UpdatableCountFetcher()
+        let controller = ConvertorViewController(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
                 countFetcher: countFetcher,
@@ -19,14 +26,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     userWalletRepository: userWalletRepository,
                     bankWalletRepository: BankWalletRepository()
                 )
-            ) { [weak self] in if $0 { self?.countFetcher.increaseCount()} },
+            ) { if $0 { countFetcher.increaseCount()} },
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
                     decoratee: RemoteRateFetcher()
                 )
             )
         )
-    )
+        controller.onCurrencySelectionTap = routeToBalanceSelection
+        return controller
+    }
+    
+    private func makeBalanceSelectionViewContorller() -> BalanceSelectionViewContorller {
+        BalanceSelectionViewContorller(
+            getUserWalleUseCase: GetUserBalancesForSelectionUseCaseImpl(
+                userWalletRepository: userWalletRepository
+            )
+        )
+    }
+    
+    private func routeToBalanceSelection(with type: ConvertorViewController.CurrencySelectionType, selectedBalance: Balance) {
+        let balanceSelectionController =  makeBalanceSelectionViewContorller()
+        let isSourceBalance = type == .source
+        balanceSelectionController.shouldDimmZeroBalances = isSourceBalance
+        balanceSelectionController.selectedBalance = selectedBalance
+        balanceSelectionController.onBalanceSelected = { [weak self] selectedBalance in
+            if isSourceBalance {
+                self?.convertorViewController.sourceBalance = selectedBalance
+            } else {
+                self?.convertorViewController.targetBalance = selectedBalance
+            }
+        }
+        rootController.present(
+            UINavigationController(rootViewController: balanceSelectionController),
+            animated: true
+        )
+    }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -45,7 +80,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 private class UserWalletRepository: WalletRepository, UserBalanceFetcher {
     private var mockWallet = Wallet(balances: [
-        Balance(id: 1, money: Money(amount: 1000, currency: Currency(id: 1, code: "USD"))),
+        Balance(id: 1, money: Money(amount: 0, currency: Currency(id: 1, code: "USD"))),
         Balance(id: 2, money: Money(amount: 100, currency: Currency(id: 2, code: "EUR")))
     ])
 

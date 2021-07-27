@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		290034FF26AE8E360068DC90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290034FE26AE8E360068DC90 /* AppDelegate.swift */; };
 		2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900350026AE8E360068DC90 /* SceneDelegate.swift */; };
-		2900350326AE8E360068DC90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900350226AE8E360068DC90 /* ViewController.swift */; };
+		2900350326AE8E360068DC90 /* ConvertorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900350226AE8E360068DC90 /* ConvertorViewController.swift */; };
 		2900350826AE8E370068DC90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2900350726AE8E370068DC90 /* Assets.xcassets */; };
 		2900350B26AE8E370068DC90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2900350926AE8E370068DC90 /* LaunchScreen.storyboard */; };
 		2900351426AEA0510068DC90 /* ConvertoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2900351326AEA0510068DC90 /* ConvertoKit */; };
@@ -19,13 +19,16 @@
 		2900351E26B011CD0068DC90 /* GetExchangeFeeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */; };
 		2900352026B01C510068DC90 /* GetExchangedAmountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351F26B01C510068DC90 /* GetExchangedAmountUseCase.swift */; };
 		2900352226B020E10068DC90 /* ExchangeMoneyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352126B020E10068DC90 /* ExchangeMoneyUseCase.swift */; };
+		2900352826B03D470068DC90 /* BalanceSelectionViewContorller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */; };
+		2900352A26B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */; };
+		2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		290034FB26AE8E360068DC90 /* Converto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Converto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		290034FE26AE8E360068DC90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2900350026AE8E360068DC90 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2900350226AE8E360068DC90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2900350226AE8E360068DC90 /* ConvertorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorViewController.swift; sourceTree = "<group>"; };
 		2900350726AE8E370068DC90 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2900350A26AE8E370068DC90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2900350C26AE8E370068DC90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -35,6 +38,9 @@
 		2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetExchangeFeeUseCase.swift; sourceTree = "<group>"; };
 		2900351F26B01C510068DC90 /* GetExchangedAmountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetExchangedAmountUseCase.swift; sourceTree = "<group>"; };
 		2900352126B020E10068DC90 /* ExchangeMoneyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeMoneyUseCase.swift; sourceTree = "<group>"; };
+		2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionViewContorller.swift; sourceTree = "<group>"; };
+		2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserBalancesForSelectionUseCase.swift; sourceTree = "<group>"; };
+		2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +75,7 @@
 		290034FD26AE8E360068DC90 /* Converto */ = {
 			isa = PBXGroup;
 			children = (
+				2900352626B03D380068DC90 /* BalanceSelectionScreen */,
 				2900352526B03CF30068DC90 /* ConvertorScreen */,
 				2900351626AFEF930068DC90 /* Domain */,
 				290034FE26AE8E360068DC90 /* AppDelegate.swift */,
@@ -92,6 +99,7 @@
 			children = (
 				2900351726AFEF9A0068DC90 /* Domain.swift */,
 				2900352126B020E10068DC90 /* ExchangeMoneyUseCase.swift */,
+				2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */,
 				2900351F26B01C510068DC90 /* GetExchangedAmountUseCase.swift */,
 				2900351B26B011040068DC90 /* GetUserBalancesUseCase.swift */,
 				2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */,
@@ -102,10 +110,19 @@
 		2900352526B03CF30068DC90 /* ConvertorScreen */ = {
 			isa = PBXGroup;
 			children = (
-				2900350226AE8E360068DC90 /* ViewController.swift */,
+				2900350226AE8E360068DC90 /* ConvertorViewController.swift */,
 				2900351926AFF1380068DC90 /* ConvertorView.swift */,
 			);
 			path = ConvertorScreen;
+			sourceTree = "<group>";
+		};
+		2900352626B03D380068DC90 /* BalanceSelectionScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */,
+				2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */,
+			);
+			path = BalanceSelectionScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,8 +219,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2900352226B020E10068DC90 /* ExchangeMoneyUseCase.swift in Sources */,
-				2900350326AE8E360068DC90 /* ViewController.swift in Sources */,
+				2900350326AE8E360068DC90 /* ConvertorViewController.swift in Sources */,
+				2900352826B03D470068DC90 /* BalanceSelectionViewContorller.swift in Sources */,
 				290034FF26AE8E360068DC90 /* AppDelegate.swift in Sources */,
+				2900352A26B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift in Sources */,
+				2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */,
 				2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */,
 				2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */,
 				2900351E26B011CD0068DC90 /* GetExchangeFeeUseCase.swift in Sources */,
