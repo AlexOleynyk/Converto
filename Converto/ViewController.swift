@@ -1,14 +1,13 @@
 import UIKit
 import ConvertoKit
 
-final class ViewController: UIViewController {
-    
+final class ViewController: UIViewController {    
     let convertorView = ConvertorView()
     
-    let getBalanceUseCase = GetUserBalancesUseCase()
-    let getFeeUseCase = GetExchangeFeeUseCase()
-    let exchangeMoneyUseCase = ExchangeMoneyUseCase()
-    let getExchangedAmountUseCase = GetExchangedAmountUseCase()
+    let getBalanceUseCase: GetUserBalancesUseCase
+    let getFeeUseCase: GetExchangeFeeUseCase
+    let exchangeMoneyUseCase: ExchangeMoneyUseCase
+    let getExchangedAmountUseCase: GetExchangedAmountUseCase
     
     var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
 
@@ -17,6 +16,24 @@ final class ViewController: UIViewController {
     }
     var targetBalance: Balance? {
         didSet { updateTargetBalance() }
+    }
+    
+    init(
+        getBalanceUseCase: GetUserBalancesUseCase,
+        getFeeUseCase: GetExchangeFeeUseCase,
+        exchangeMoneyUseCase: ExchangeMoneyUseCase,
+        getExchangedAmountUseCase: GetExchangedAmountUseCase
+    ) {
+        self.getBalanceUseCase = getBalanceUseCase
+        self.getFeeUseCase = getFeeUseCase
+        self.exchangeMoneyUseCase = exchangeMoneyUseCase
+        self.getExchangedAmountUseCase = getExchangedAmountUseCase
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func loadView() {

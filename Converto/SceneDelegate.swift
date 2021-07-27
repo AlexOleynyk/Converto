@@ -10,7 +10,14 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    lazy var rootController = UINavigationController(rootViewController: ViewController())
+    lazy var rootController = UINavigationController(
+        rootViewController: ViewController(
+            getBalanceUseCase: GetUserBalancesUseCase(),
+            getFeeUseCase: GetExchangeFeeUseCase(),
+            exchangeMoneyUseCase: ExchangeMoneyUseCase(),
+            getExchangedAmountUseCase: GetExchangedAmountUseCase()
+        )
+    )
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
