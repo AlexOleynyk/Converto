@@ -6,6 +6,14 @@ public final class PrimaryButton: UIButton {
         didSet { updateAppearance() }
     }
     
+    public override var isEnabled: Bool {
+        didSet { updateAppearance() }
+    }
+    
+    public override var isHighlighted: Bool {
+        didSet { updateAppearance() }
+    }
+    
     private let loadingIndicator = setup(UIActivityIndicatorView()) {
             $0.color = Asset.Colors.fixedBlue200
     }
@@ -40,6 +48,11 @@ public final class PrimaryButton: UIButton {
         isLoading
             ? loadingIndicator.startAnimating()
             : loadingIndicator.stopAnimating()
+        layer.opacity = isEnabled ? 1 : 0.4
+        backgroundColor = isHighlighted
+            ? Asset.Colors.blue500.color.withAlphaComponent(0.7)
+            : Asset.Colors.blue500.color
+        
         updateSubviews()
     }
     
