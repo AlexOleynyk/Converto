@@ -50,37 +50,38 @@ struct Currency: Equatable {
 
 class GetUserBalancesUseCase {
     
-    func get(currency: Currency) -> Balance? {
-        mockWallet.balances.first(where: { $0.money.currency == currency })
+    func get(currency: Currency, completion: @escaping (Balance?) -> Void) {
+        completion(mockWallet.balances.first(where: { $0.money.currency == currency }))
     }
 }
 
 class GetExchangeFeeUseCase {
     
-    func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal) -> Money {
+    func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
         var initialValue = amount * 0.007
         var result: Decimal = 0
         NSDecimalRound(&result, &initialValue, 2, .plain)
-        return .init(amount: result, currency: sourceBalance.money.currency)
+        completion(.init(amount: result, currency: sourceBalance.money.currency))
     }
 }
 
 class GetExchangedAmountUseCase {
-    func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal) -> Money {
+    func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
         let rate: Decimal = sourceBalance.money.amount >= 500 ? 2 : 4
         var initialValue = amount * rate
         var result: Decimal = 0
         NSDecimalRound(&result, &initialValue, 2, .plain)
-        return .init(amount: result, currency: sourceBalance.money.currency)
+        completion(.init(amount: result, currency: sourceBalance.money.currency))
     }
 }
 
 
 class ExchangeMoneyUseCase {
-    func exchange(command: ExchangeMoneyCommand) {
+    func exchange(command: ExchangeMoneyCommand, completion: @escaping (Bool) -> Void) {
         mockWallet.withdrow(from: command.sourceBalance, amount: command.amount + command.fee)
         mockWallet.deposit(from: command.targetBalance, amount: command.convertedAmount)
         bankWallet.deposit(from: command.targetBalance, amount: command.fee)
+        completion(true)
     }
 }
 

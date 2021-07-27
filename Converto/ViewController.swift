@@ -7,10 +7,11 @@ final class ViewController: UIViewController {
     
     let getBalanceUseCase = GetUserBalancesUseCase()
     let getFeeUseCase = GetExchangeFeeUseCase()
-    var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
     let exchangeMoneyUseCase = ExchangeMoneyUseCase()
     let getExchangedAmountUseCase = GetExchangedAmountUseCase()
     
+    var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
+
     var sourceBalance: Balance? {
         didSet { updateSourceBalance() }
     }
@@ -44,31 +45,40 @@ final class ViewController: UIViewController {
     }
     
     private func updateBalances() {
-        sourceBalance = getBalanceUseCase.get(currency: .init(id: 1, code: "USD"))
-        targetBalance = getBalanceUseCase.get(currency: .init(id: 2, code: "EUR"))
+         getBalanceUseCase.get(currency: .init(id: 1, code: "USD")) { [weak self] in
+            self?.sourceBalance = $0
+        }
+        getBalanceUseCase.get(currency: .init(id: 2, code: "EUR")) { [weak self] in
+            self?.targetBalance = $0
+        }
         
         updateFees(amount: enteredAmount(), convertedAmount: 0)
     }
-    
+    //
     private func updateSourceBalance() {
         convertorView.sourceMoneyField.moneyField.currencyLabel.text = sourceBalance?.money.currency.code
         convertorView.sourceMoneyField.balanceLabel.text = "Available: \(sourceBalance?.money.amount ?? 0)"
     }
-    
+    //
     private func updateTargetBalance() {
         convertorView.targetMoneyField.moneyField.currencyLabel.text = targetBalance?.money.currency.code
         convertorView.targetMoneyField.balanceLabel.text = "Available: \(targetBalance?.money.amount ?? 0)"
     }
+    //
     
     private func updateFees(amount: Decimal, convertedAmount: Decimal) {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
             
-            let fees = getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount)
+            getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount) { [weak self] in
+                let fees = $0
+                //
+                self?.convertorView.feeView.setComposedTitle(bold: "\(fees.amount) \(fees.currency.code)", regular: "commission fee")
+                self?.convertorView.feeView.iconView.image = Asset.Icons.sellArrow.image
+                //
+                
+                self?.checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
+            }
             
-            convertorView.feeView.setComposedTitle(bold: "\(fees.amount) \(fees.currency.code)", regular: "commission fee")
-            convertorView.feeView.iconView.image = Asset.Icons.sellArrow.image
-            
-            checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
         }
     }
     
@@ -85,22 +95,30 @@ final class ViewController: UIViewController {
                 convertedAmount: convertedAmount,
                 fee: fee
             )
+            //
             convertorView.convertButton.isEnabled = (try? exchangeMoneyCommand?.get()) != nil
+            //
         }
     }
     @objc private func onEchangeButtontap() {
-        if let command = try? exchangeMoneyCommand?.get() { exchangeMoneyUseCase.exchange(command: command)
-            updateBalances()
-            onSourceAmountChange()
+        if let command = try? exchangeMoneyCommand?.get() {
+            exchangeMoneyUseCase.exchange(command: command) { [weak self] _ in
+                self?.updateBalances()
+                self?.onSourceAmountChange()
+            }
         }
     }
     
     @objc private func onSourceAmountChange() {
         
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
-        let exchangedMoney = getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount())
-            convertorView.targetMoneyField.moneyField.inputField.text = "\(exchangedMoney.amount)"
-            updateFees(amount: enteredAmount(), convertedAmount: exchangedMoney.amount)
+            getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount()) { [weak self] in
+                //
+                self?.convertorView.targetMoneyField.moneyField.inputField.text = "\($0.amount)"
+                //
+                self?.updateFees(amount: self?.enteredAmount() ?? 0, convertedAmount: $0.amount)
+                
+            }
         }
     }
     
