@@ -62,7 +62,7 @@ final class ViewController: UIViewController {
     }
     
     private func updateBalances() {
-         getBalanceUseCase.get(currency: .init(id: 1, code: "USD")) { [weak self] in
+        getBalanceUseCase.get(currency: .init(id: 1, code: "USD")) { [weak self] in
             self?.sourceBalance = $0
         }
         getBalanceUseCase.get(currency: .init(id: 2, code: "EUR")) { [weak self] in
@@ -119,7 +119,14 @@ final class ViewController: UIViewController {
     }
     @objc private func onEchangeButtontap() {
         if let command = try? exchangeMoneyCommand?.get() {
-            exchangeMoneyUseCase.exchange(command: command) { [weak self] _ in
+            //
+            convertorView.convertButton.isLoading = true
+            //
+            exchangeMoneyUseCase.exchange(command: command) { [weak self] success in
+                //
+                self?.convertorView.convertButton.isLoading = false
+                //
+                guard success else { return }
                 self?.updateBalances()
                 self?.onSourceAmountChange()
             }

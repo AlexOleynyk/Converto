@@ -15,6 +15,10 @@
 		2900351426AEA0510068DC90 /* ConvertoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2900351326AEA0510068DC90 /* ConvertoKit */; };
 		2900351826AFEF9A0068DC90 /* Domain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351726AFEF9A0068DC90 /* Domain.swift */; };
 		2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351926AFF1380068DC90 /* ConvertorView.swift */; };
+		2900351C26B011040068DC90 /* GetUserBalancesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351B26B011040068DC90 /* GetUserBalancesUseCase.swift */; };
+		2900351E26B011CD0068DC90 /* GetExchangeFeeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */; };
+		2900352026B01C510068DC90 /* GetExchangedAmountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900351F26B01C510068DC90 /* GetExchangedAmountUseCase.swift */; };
+		2900352226B020E10068DC90 /* ExchangeMoneyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352126B020E10068DC90 /* ExchangeMoneyUseCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +31,10 @@
 		2900350C26AE8E370068DC90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2900351726AFEF9A0068DC90 /* Domain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Domain.swift; sourceTree = "<group>"; };
 		2900351926AFF1380068DC90 /* ConvertorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorView.swift; sourceTree = "<group>"; };
+		2900351B26B011040068DC90 /* GetUserBalancesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserBalancesUseCase.swift; sourceTree = "<group>"; };
+		2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetExchangeFeeUseCase.swift; sourceTree = "<group>"; };
+		2900351F26B01C510068DC90 /* GetExchangedAmountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetExchangedAmountUseCase.swift; sourceTree = "<group>"; };
+		2900352126B020E10068DC90 /* ExchangeMoneyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeMoneyUseCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +92,10 @@
 			isa = PBXGroup;
 			children = (
 				2900351726AFEF9A0068DC90 /* Domain.swift */,
+				2900352126B020E10068DC90 /* ExchangeMoneyUseCase.swift */,
+				2900351F26B01C510068DC90 /* GetExchangedAmountUseCase.swift */,
+				2900351B26B011040068DC90 /* GetUserBalancesUseCase.swift */,
+				2900351D26B011CD0068DC90 /* GetExchangeFeeUseCase.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -181,10 +193,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2900352226B020E10068DC90 /* ExchangeMoneyUseCase.swift in Sources */,
 				2900350326AE8E360068DC90 /* ViewController.swift in Sources */,
 				290034FF26AE8E360068DC90 /* AppDelegate.swift in Sources */,
 				2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */,
 				2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */,
+				2900351E26B011CD0068DC90 /* GetExchangeFeeUseCase.swift in Sources */,
+				2900351C26B011040068DC90 /* GetUserBalancesUseCase.swift in Sources */,
+				2900352026B01C510068DC90 /* GetExchangedAmountUseCase.swift in Sources */,
 				2900351826AFEF9A0068DC90 /* Domain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
