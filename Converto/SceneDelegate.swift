@@ -14,12 +14,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func makeConvertorViewController() -> ConvertorViewController {
         let countFetcher = UpdatableCountFetcher()
-        let increaseCountOnSuccess: (Bool) -> Void = { if $0 { countFetcher.increaseCount() } }
+        let increaseTargetBalanceCountOnSuccess: (ExchangeMoneyCommand, Bool) -> Void = { if $1 { countFetcher.increaseCount(for: $0.targetBalance) } }
         let controller = ConvertorViewController(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
                 countFetcher: countFetcher,
-                freeLimitCount: 5,
+                freeLimitCount: 2,
                 decoratee: PercentBasedGetExchangeFeeUseCase(percent: 0.007)
             ),
             exchangeMoneyUseCase: ObservingExchangeMoneyUseCaseDecorator(
@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     userWalletRepository: userWalletRepository,
                     bankWalletRepository: BankWalletRepository()
                 ),
-                callback: increaseCountOnSuccess
+                callback: increaseTargetBalanceCountOnSuccess
             ),
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
@@ -160,11 +160,11 @@ private class BankWalletRepository: WalletRepository {
 private class ObservingExchangeMoneyUseCaseDecorator: ExchangeMoneyUseCase {
 
     private let decoratee: ExchangeMoneyUseCase
-    private let callback: (Bool) -> Void
+    private let callback: (ExchangeMoneyCommand, Bool) -> Void
     
     init(
         decoratee: ExchangeMoneyUseCase,
-        callback: @escaping (Bool) -> Void
+        callback: @escaping (ExchangeMoneyCommand, Bool) -> Void
     ) {
         self.decoratee = decoratee
         self.callback = callback
@@ -172,21 +172,26 @@ private class ObservingExchangeMoneyUseCaseDecorator: ExchangeMoneyUseCase {
     
     func exchange(command: ExchangeMoneyCommand, completion: @escaping (Bool) -> Void) {
         decoratee.exchange(command: command) { [weak self] result in
-            self?.callback(result)
+            self?.callback(command, result)
             completion(result)
         }
     }
 }
 
 private class UpdatableCountFetcher: TransactionCountFetcher {
-    private var count = 0
+    private var countStorage: [Int:Int] = [:]
     
-    func increaseCount() {
-        count += 1
+    
+    func increaseCount(for balance: Balance) {
+        countStorage[balance.id] = value(for: balance) + 1
+    }
+    
+    private func value(for balance: Balance) -> Int {
+        countStorage[balance.id] ?? 0
     }
     
     func count(for balance: Balance, completion: @escaping (Int) -> Void) {
-        completion(count)
+        completion(value(for: balance))
     }
 }
 

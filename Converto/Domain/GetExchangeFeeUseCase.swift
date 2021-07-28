@@ -26,7 +26,7 @@ final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCase {
     }
     
     func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
-        countFetcher.count(for: sourceBalance) { [weak self] count in
+        countFetcher.count(for: targetBalance) { [weak self] count in
             guard let self = self else { return }
             if count < self.freeLimitCount { return completion(.init(amount: 0, currency: sourceBalance.money.currency)) }
             self.decoratee.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount, completion: completion)
