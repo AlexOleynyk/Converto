@@ -7,6 +7,7 @@ public final class MoneyField: UIControl {
         $0.textColor = Asset.Colors.gray900.color
         $0.tintColor = Asset.Colors.blue500.color
         $0.backgroundColor = Asset.Colors.blue200.color
+        $0.keyboardType = .decimalPad
         $0.padding = .init(top: 8, left: 12, bottom: 8, right: 12)
     }
     

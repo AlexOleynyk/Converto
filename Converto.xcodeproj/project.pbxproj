@@ -23,6 +23,10 @@
 		2900352A26B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */; };
 		2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */; };
 		2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676426B1437900E0549D /* KeyboardObserving.swift */; };
+		2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */; };
+		2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676926B14C9500E0549D /* TwoWayFormatter.swift */; };
+		2996676F26B14C9500E0549D /* FormattedTextFieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676B26B14C9500E0549D /* FormattedTextFieldController.swift */; };
+		2996677026B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676C26B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +47,10 @@
 		2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserBalancesForSelectionUseCase.swift; sourceTree = "<group>"; };
 		2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionCell.swift; sourceTree = "<group>"; };
 		2996676426B1437900E0549D /* KeyboardObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserving.swift; sourceTree = "<group>"; };
+		2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalTwoWayFormatter.swift; sourceTree = "<group>"; };
+		2996676926B14C9500E0549D /* TwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoWayFormatter.swift; sourceTree = "<group>"; };
+		2996676B26B14C9500E0549D /* FormattedTextFieldController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormattedTextFieldController.swift; sourceTree = "<group>"; };
+		2996676C26B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DecimalTwoWayFormatter+RangeReplacer.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +85,7 @@
 		290034FD26AE8E360068DC90 /* Converto */ = {
 			isa = PBXGroup;
 			children = (
-				2996676326B1437000E0549D /* KeyboardHelpers */,
+				2996676626B14C6C00E0549D /* ThirdParty */,
 				2900352626B03D380068DC90 /* BalanceSelectionScreen */,
 				2900352526B03CF30068DC90 /* ConvertorScreen */,
 				2900351626AFEF930068DC90 /* Domain */,
@@ -134,6 +142,34 @@
 				2996676426B1437900E0549D /* KeyboardObserving.swift */,
 			);
 			path = KeyboardHelpers;
+			sourceTree = "<group>";
+		};
+		2996676626B14C6C00E0549D /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				2996676A26B14C9500E0549D /* FormattedTextFieldController */,
+				2996676726B14C9500E0549D /* TwoWayFormatter */,
+				2996676326B1437000E0549D /* KeyboardHelpers */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		2996676726B14C9500E0549D /* TwoWayFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */,
+				2996676926B14C9500E0549D /* TwoWayFormatter.swift */,
+			);
+			path = TwoWayFormatter;
+			sourceTree = "<group>";
+		};
+		2996676A26B14C9500E0549D /* FormattedTextFieldController */ = {
+			isa = PBXGroup;
+			children = (
+				2996676B26B14C9500E0549D /* FormattedTextFieldController.swift */,
+				2996676C26B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift */,
+			);
+			path = FormattedTextFieldController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,18 +265,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2996676F26B14C9500E0549D /* FormattedTextFieldController.swift in Sources */,
 				2900352226B020E10068DC90 /* ExchangeMoneyUseCase.swift in Sources */,
 				2900350326AE8E360068DC90 /* ConvertorViewController.swift in Sources */,
 				2900352826B03D470068DC90 /* BalanceSelectionViewContorller.swift in Sources */,
 				290034FF26AE8E360068DC90 /* AppDelegate.swift in Sources */,
 				2900352A26B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift in Sources */,
 				2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */,
+				2996677026B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift in Sources */,
 				2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */,
+				2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */,
 				2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */,
 				2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */,
 				2900351E26B011CD0068DC90 /* GetExchangeFeeUseCase.swift in Sources */,
 				2900351C26B011040068DC90 /* GetUserBalancesUseCase.swift in Sources */,
 				2900352026B01C510068DC90 /* GetExchangedAmountUseCase.swift in Sources */,
+				2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */,
 				2900351826AFEF9A0068DC90 /* Domain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

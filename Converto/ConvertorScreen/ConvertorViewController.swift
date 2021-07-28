@@ -28,6 +28,9 @@ final class ConvertorViewController: UIViewController {
         didSet { updateTargetBalance() }
     }
     
+    private lazy var decimalFormatter = DecimalTwoWayFormatter()
+    private lazy var decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
+    
     init(
         getBalanceUseCase: GetUserBalancesUseCase,
         getFeeUseCase: GetExchangeFeeUseCase,
@@ -39,6 +42,8 @@ final class ConvertorViewController: UIViewController {
         self.exchangeMoneyUseCase = exchangeMoneyUseCase
         self.getExchangedAmountUseCase = getExchangedAmountUseCase
         super.init(nibName: nil, bundle: nil)
+        
+        self.convertorView.sourceMoneyField.moneyField.inputField.delegate = decimalFieldController
     }
     
     @available(*, unavailable)
@@ -162,7 +167,7 @@ final class ConvertorViewController: UIViewController {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
             getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount()) { [weak self] in
                 //
-                self?.convertorView.targetMoneyField.moneyField.inputField.text = "\($0.amount)"
+                self?.convertorView.targetMoneyField.moneyField.inputField.text = self?.decimalFormatter.toString($0.amount)
                 //
                 self?.updateFees(amount: self?.enteredAmount() ?? 0, convertedAmount: $0.amount)
                 
@@ -178,7 +183,7 @@ final class ConvertorViewController: UIViewController {
     }
     
     private func enteredAmount() -> Decimal {
-        Decimal(string: convertorView.sourceMoneyField.moneyField.inputField.text ?? "") ?? 0
+        decimalFormatter.fromString(convertorView.sourceMoneyField.moneyField.inputField.text ?? "") ?? 0
     }
 }
 
