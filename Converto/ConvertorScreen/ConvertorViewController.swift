@@ -81,11 +81,14 @@ final class ConvertorViewController: UIViewController {
     }
     
     private func updateBalances() {
+        convertorView.convertButton.isLoading = true
         getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? .init(id: 2, code: "EUR")) { [weak self] in
             self?.sourceBalance = $0
+            self?.convertorView.convertButton.isLoading = false
         }
         getBalanceUseCase.get(currency: targetBalance?.money.currency ?? .init(id: 1, code: "USD")) { [weak self] in
             self?.targetBalance = $0
+            self?.convertorView.convertButton.isLoading = false
         }
         
         updateFees(amount: enteredAmount(), convertedAmount: 0)

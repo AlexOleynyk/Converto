@@ -96,20 +96,22 @@ private class UserWalletRepository: WalletRepository, UserBalanceFetcher {
     ])
 
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+        simulateNetworkDelay {
             self.mockWallet = wallet
             completion(true)
         }
     }
     
     func fetchWallet(completion: @escaping (Wallet) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+        simulateNetworkDelay {
             completion(self.mockWallet)
         }
     }
     
     func get(currency: Currency, completion: @escaping (Balance?) -> Void) {
-        completion(mockWallet.balances.first(where: { $0.money.currency == currency }))
+        simulateNetworkDelay {
+            completion(self.mockWallet.balances.first(where: { $0.money.currency == currency }))
+        }
     }
 }
 
@@ -240,3 +242,9 @@ private class RemoteRateFetcher: ExchangeRateFetcher {
     }
 }
 
+
+func simulateNetworkDelay(delayInSeconds: TimeInterval = 1, completion: @escaping () -> Void) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+        completion()
+    }
+}
