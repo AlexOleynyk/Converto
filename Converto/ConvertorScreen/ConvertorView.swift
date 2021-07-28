@@ -44,12 +44,15 @@ final class ConvertorView: UIView {
             container.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             container.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
+        
         bottomConstraint = convertButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20)
         addSubview(convertButton, constraints: [
             convertButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             convertButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             bottomConstraint
         ])
+        
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap)))
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -73,6 +76,10 @@ final class ConvertorView: UIView {
             view.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -insets.bottom)
         ])
         return wrapper
+    }
+    
+    @objc func onTap() {
+            endEditing(true)
     }
     
     func adjustForKeyboardHeight(height: CGFloat) {
