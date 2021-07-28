@@ -39,17 +39,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return controller
     }
     
-    private func makeBalanceSelectionViewContorller(excludedBalance: Balance?) -> BalanceSelectionViewContorller {
-        let repository: WalletRepository = excludedBalance.map {
-            ExcludingWalletRepositoryDecorator(
-                decoratee: userWalletRepository,
-                exculedBalance: $0
-            )
-        } ?? userWalletRepository
-        
-        return BalanceSelectionViewContorller(
+    private func makeBalanceSelectionViewContorller(excludedBalance: Balance) -> BalanceSelectionViewContorller {
+        BalanceSelectionViewContorller(
             getUserWalleUseCase: GetUserBalancesForSelectionUseCaseImpl(
-                userWalletRepository: repository
+                userWalletRepository: ExcludingWalletRepositoryDecorator(
+                    decoratee: userWalletRepository,
+                    exculedBalance: excludedBalance
+                )
             )
         )
     }
@@ -60,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         targetBalance: Balance
     ) {
         let selectedBalance = type.isSource ? sourceBalance : targetBalance
-        let excludedBalance = type.isSource ? nil : sourceBalance
+        let excludedBalance = type.isSource ? targetBalance : sourceBalance
         let balanceSelectionController =  makeBalanceSelectionViewContorller(excludedBalance: excludedBalance)
         balanceSelectionController.shouldDimmZeroBalances = type.isSource
         balanceSelectionController.selectedBalance = selectedBalance

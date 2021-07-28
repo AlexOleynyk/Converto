@@ -85,17 +85,21 @@ final class ConvertorViewController: UIViewController {
         
         updateFees(amount: enteredAmount(), convertedAmount: 0)
     }
-    //
     private func updateSourceBalance() {
+        //
         convertorView.sourceMoneyField.moneyField.currencyLabel.text = sourceBalance?.money.currency.code
         convertorView.sourceMoneyField.balanceLabel.text = "Available: \(sourceBalance?.money.amount ?? 0)"
+        //
+        updateExchangedAmount()
     }
-    //
+    
     private func updateTargetBalance() {
+        //
         convertorView.targetMoneyField.moneyField.currencyLabel.text = targetBalance?.money.currency.code
         convertorView.targetMoneyField.balanceLabel.text = "Available: \(targetBalance?.money.amount ?? 0)"
+        //
+        updateExchangedAmount()
     }
-    //
     
     private func updateFees(amount: Decimal, convertedAmount: Decimal) {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
@@ -151,7 +155,10 @@ final class ConvertorViewController: UIViewController {
     }
     
     @objc private func onSourceAmountChange() {
-        
+        updateExchangedAmount()
+    }
+    
+    private func updateExchangedAmount() {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
             getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount()) { [weak self] in
                 //
