@@ -10,45 +10,16 @@ final class ConvertorViewController: UIViewController {
         var isSource: Bool { self == .source }
     }
     
-    let convertorView = ConvertorView()
+    var onCurrencySelectionTap: ((CurrencySelectionType) -> Void)?
+    var presenter: ConvertorPresenter?
     
-    let getBalanceUseCase: GetUserBalancesUseCase
-    let getFeeUseCase: GetExchangeFeeUseCase
-    let exchangeMoneyUseCase: ExchangeMoneyUseCase
-    let getExchangedAmountUseCase: GetExchangedAmountUseCase
+    private let decimalFieldController: UITextFieldDelegate
+    private let convertorView = ConvertorView()
     
-    var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
-    
-    var onCurrencySelectionTap: ((CurrencySelectionType, Balance, Balance) -> Void)?
-
-    var sourceBalance: Balance? {
-        didSet { updateSourceBalance() }
-    }
-    var targetBalance: Balance? {
-        didSet { updateTargetBalance() }
-    }
-    
-    private lazy var decimalFormatter = DecimalTwoWayFormatter()
-    private lazy var decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
-    
-    init(
-        getBalanceUseCase: GetUserBalancesUseCase,
-        getFeeUseCase: GetExchangeFeeUseCase,
-        exchangeMoneyUseCase: ExchangeMoneyUseCase,
-        getExchangedAmountUseCase: GetExchangedAmountUseCase
-    ) {
-        self.getBalanceUseCase = getBalanceUseCase
-        self.getFeeUseCase = getFeeUseCase
-        self.exchangeMoneyUseCase = exchangeMoneyUseCase
-        self.getExchangedAmountUseCase = getExchangedAmountUseCase
+    init(decimalFieldController: UITextFieldDelegate) {
+        self.decimalFieldController = decimalFieldController
         super.init(nibName: nil, bundle: nil)
-        
         self.convertorView.sourceMoneyField.moneyField.inputField.delegate = decimalFieldController
-    }
-    
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func loadView() {
@@ -57,11 +28,13 @@ final class ConvertorViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         title = "Currency converter"
+        configureView()
         registerForKeyboardEvents()
-        
-        updateBalances()
+        presenter?.updateBalances()
+    }
+    
+    private func configureView() {
         convertorView.convertButton.setTitle("Exchange", for: [])
         
         convertorView.sourceMoneyField.moneyField.inputField.placeholder = "0.00"
@@ -80,113 +53,56 @@ final class ConvertorViewController: UIViewController {
         convertorView.targetMoneyField.moneyField.addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
     }
     
-    private func updateBalances() {
-        convertorView.convertButton.isLoading = true
-        getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? .init(id: 2, code: "EUR")) { [weak self] in
-            self?.sourceBalance = $0
-            self?.convertorView.convertButton.isLoading = false
-        }
-        getBalanceUseCase.get(currency: targetBalance?.money.currency ?? .init(id: 1, code: "USD")) { [weak self] in
-            self?.targetBalance = $0
-            self?.convertorView.convertButton.isLoading = false
-        }
-        
-        updateFees(amount: enteredAmount(), convertedAmount: 0)
-    }
-    private func updateSourceBalance() {
-        //
-        convertorView.sourceMoneyField.moneyField.currencyLabel.text = sourceBalance?.money.currency.code
-        convertorView.sourceMoneyField.balanceLabel.text = "Available: \(sourceBalance?.money.amount ?? 0)"
-        //
-        updateExchangedAmount()
-    }
-    
-    private func updateTargetBalance() {
-        //
-        convertorView.targetMoneyField.moneyField.currencyLabel.text = targetBalance?.money.currency.code
-        convertorView.targetMoneyField.balanceLabel.text = "Available: \(targetBalance?.money.amount ?? 0)"
-        //
-        updateExchangedAmount()
-    }
-    
-    private func updateFees(amount: Decimal, convertedAmount: Decimal) {
-        if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
-            
-            getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount) { [weak self] fees in
-                //
-                if fees.amount > 0 {
-                    self?.convertorView.feeView.setComposedTitle(bold: "\(fees.amount) \(fees.currency.code)", regular: "commission fee")
-                    self?.convertorView.feeView.iconView.tintColor = Asset.Colors.red500.color
-                } else {
-                    self?.convertorView.feeView.iconView.tintColor = Asset.Colors.green500.color
-                    self?.convertorView.feeView.titleLabel.text = "No fee commission"
-                }
-                //
-                
-                self?.checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
-            }
-        }
-    }
-    
-    private func checkForExchangePossibility(
-        amount: Decimal,
-        convertedAmount: Decimal,
-        fee: Decimal
-    ) {
-        if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
-            exchangeMoneyCommand = ExchangeMoneyCommand.make(
-                sourceBalance: sourceBalance,
-                targetBalance: targetBalance,
-                amount: amount,
-                convertedAmount: convertedAmount,
-                fee: fee
-            )
-            //
-            convertorView.convertButton.isEnabled = (try? exchangeMoneyCommand?.get()) != nil
-            //
-        }
-    }
     @objc private func onEchangeButtontap() {
-        if let command = try? exchangeMoneyCommand?.get() {
-            //
-            convertorView.convertButton.isLoading = true
-            //
-            exchangeMoneyUseCase.exchange(command: command) { [weak self] success in
-                //
-                self?.convertorView.convertButton.isLoading = false
-                //
-                guard success else { return }
-                self?.updateBalances()
-                self?.onSourceAmountChange()
-            }
-        }
+        presenter?.exchangeMoney()
     }
     
     @objc private func onSourceAmountChange() {
-        updateExchangedAmount()
-    }
-    
-    private func updateExchangedAmount() {
-        if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
-            getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount()) { [weak self] in
-                //
-                self?.convertorView.targetMoneyField.moneyField.inputField.text = self?.decimalFormatter.toString($0.amount)
-                //
-                self?.updateFees(amount: self?.enteredAmount() ?? 0, convertedAmount: $0.amount)
-                
-            }
-        }
+        presenter?.onSourceAmountChange(amount: convertorView.sourceMoneyField.moneyField.inputField.text ?? "")
     }
     
     @objc private func onCurrencySelectionTap(_ moneyField: MoneyField) {
-        if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
-            let type: CurrencySelectionType = moneyField == convertorView.targetMoneyField.moneyField ? .target : .source
-            onCurrencySelectionTap?(type, sourceBalance, targetBalance)
-        }
+        let type: CurrencySelectionType = moneyField == convertorView.targetMoneyField.moneyField ? .target : .source
+        onCurrencySelectionTap?(type)
     }
     
-    private func enteredAmount() -> Decimal {
-        decimalFormatter.fromString(convertorView.sourceMoneyField.moneyField.inputField.text ?? "") ?? 0
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ConvertorViewController: ConvertorPresantableView {
+    func display(buttonIsEnabled: Bool) {
+        convertorView.convertButton.isEnabled = buttonIsEnabled
+    }
+    
+    func display(isLoading: Bool) {
+        convertorView.convertButton.isLoading = isLoading
+    }
+    
+    func display(convertedAmount: String) {
+        convertorView.targetMoneyField.moneyField.inputField.text = convertedAmount
+    }
+    
+    func display(sourceBalanceAmount: String, currency: String) {
+        convertorView.sourceMoneyField.balanceLabel.text = sourceBalanceAmount
+        convertorView.sourceMoneyField.moneyField.currencyLabel.text = currency
+    }
+    
+    func display(targetBalanceAmount: String, currency: String) {
+        convertorView.targetMoneyField.balanceLabel.text = targetBalanceAmount
+        convertorView.targetMoneyField.moneyField.currencyLabel.text = currency
+    }
+    
+    func display(feeAmount: String, description: String, isPositive: Bool) {
+        if isPositive {
+            convertorView.feeView.setComposedTitle(bold: feeAmount, regular: description)
+            convertorView.feeView.iconView.tintColor = Asset.Colors.red500.color
+        } else {
+            convertorView.feeView.iconView.tintColor = Asset.Colors.green500.color
+            convertorView.feeView.titleLabel.text = description
+        }
     }
 }
 

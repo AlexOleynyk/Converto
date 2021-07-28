@@ -15,7 +15,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func makeConvertorViewController() -> ConvertorViewController {
         let countFetcher = UpdatableCountFetcher()
         let increaseTargetBalanceCountOnSuccess: (ExchangeMoneyCommand, Bool) -> Void = { if $1 { countFetcher.increaseCount(for: $0.targetBalance) } }
-        let controller = ConvertorViewController(
+        let decimalFormatter = DecimalTwoWayFormatter()
+        let decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
+        
+        let controller = ConvertorViewController(decimalFieldController: decimalFieldController)
+        
+        let presenter = ConvertorPresenter(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
                 countFetcher: countFetcher,
@@ -33,9 +38,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
                     decoratee: RemoteRateFetcher()
                 )
-            )
+            ),
+            decimalFormatter: decimalFormatter
         )
-        controller.onCurrencySelectionTap = routeToBalanceSelection
+        controller.presenter = presenter
+        presenter.presantableView = WeakRef(controller)
+        controller.onCurrencySelectionTap = { type in
+            guard let sourceBalance = presenter.sourceBalance, let targetBalance = presenter.targetBalance else { return }
+            self.routeToBalanceSelection(
+                with: type,
+                sourceBalance: sourceBalance,
+                targetBalance: targetBalance
+            )
+        }
+        
         return controller
     }
     
@@ -62,9 +78,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         balanceSelectionController.selectedBalance = selectedBalance
         balanceSelectionController.onBalanceSelected = { [weak self] selectedBalance in
             if type.isSource {
-                self?.convertorViewController.sourceBalance = selectedBalance
+                self?.convertorViewController.presenter?.sourceBalance = selectedBalance
             } else {
-                self?.convertorViewController.targetBalance = selectedBalance
+                self?.convertorViewController.presenter?.targetBalance = selectedBalance
             }
         }
         rootController.present(
@@ -242,5 +258,39 @@ private class RemoteRateFetcher: ExchangeRateFetcher {
 func simulateNetworkDelay(delayInSeconds: TimeInterval = 1, completion: @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
         completion()
+    }
+}
+
+final class WeakRef<T: AnyObject> {
+    weak var object: T?
+    
+    init(_ object: T) {
+        self.object = object
+    }
+}
+
+extension WeakRef: ConvertorPresantableView where T: ConvertorPresantableView {
+    func display(convertedAmount: String) {
+        object?.display(convertedAmount: convertedAmount)
+    }
+    
+    func display(isLoading: Bool) {
+        object?.display(isLoading: isLoading)
+    }
+    
+    func display(buttonIsEnabled: Bool) {
+        object?.display(buttonIsEnabled: buttonIsEnabled)
+    }
+    
+    func display(sourceBalanceAmount: String, currency: String) {
+        object?.display(sourceBalanceAmount: sourceBalanceAmount, currency: currency)
+    }
+    
+    func display(targetBalanceAmount: String, currency: String) {
+        object?.display(targetBalanceAmount: targetBalanceAmount, currency: currency)
+    }
+    
+    func display(feeAmount: String, description: String, isPositive: Bool) {
+        object?.display(feeAmount: feeAmount, description: description, isPositive: isPositive)
     }
 }
