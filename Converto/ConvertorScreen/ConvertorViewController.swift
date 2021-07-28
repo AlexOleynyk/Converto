@@ -65,7 +65,9 @@ final class ConvertorViewController: UIViewController {
  
         convertorView.targetMoneyField.moneyField.inputField.placeholder = "0.00"
         convertorView.targetMoneyField.titleView.titleLabel.text = "Receive"
-        convertorView.targetMoneyField.titleView.iconView.image = Asset.Icons.sellArrow.image
+        convertorView.targetMoneyField.titleView.iconView.image = Asset.Icons.receiveArrow.image
+        
+        convertorView.feeView.iconView.image = Asset.Icons.feeCommission.image
         
         convertorView.sourceMoneyField.moneyField.inputField.addTarget(self, action: #selector(onSourceAmountChange), for: .editingChanged)
         convertorView.convertButton.addTarget(self, action: #selector(onEchangeButtontap), for: .primaryActionTriggered)
@@ -98,16 +100,19 @@ final class ConvertorViewController: UIViewController {
     private func updateFees(amount: Decimal, convertedAmount: Decimal) {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
             
-            getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount) { [weak self] in
-                let fees = $0
+            getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount) { [weak self] fees in
                 //
-                self?.convertorView.feeView.setComposedTitle(bold: "\(fees.amount) \(fees.currency.code)", regular: "commission fee")
-                self?.convertorView.feeView.iconView.image = Asset.Icons.sellArrow.image
+                if fees.amount > 0 {
+                    self?.convertorView.feeView.setComposedTitle(bold: "\(fees.amount) \(fees.currency.code)", regular: "commission fee")
+                    self?.convertorView.feeView.iconView.tintColor = Asset.Colors.red500.color
+                } else {
+                    self?.convertorView.feeView.iconView.tintColor = Asset.Colors.green500.color
+                    self?.convertorView.feeView.titleLabel.text = "No fee commission"
+                }
                 //
                 
                 self?.checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
             }
-            
         }
     }
     

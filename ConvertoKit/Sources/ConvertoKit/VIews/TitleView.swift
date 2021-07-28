@@ -24,7 +24,7 @@ public final class TitleView: UIView {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 2)
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 4)
         ])
     }
     
