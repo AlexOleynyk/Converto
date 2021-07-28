@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DecimalTwoWayFormatter: TwoWayFormatter {
+struct DecimalTwoWayFormatter: TwoWayFormatter {
 
     let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -9,7 +9,7 @@ public struct DecimalTwoWayFormatter: TwoWayFormatter {
         return formatter
     }()
 
-    public init(
+    init(
         groupingSeparator: String? = nil,
         decimalSeparator: String? = nil,
         localeId: String? = nil
@@ -19,11 +19,11 @@ public struct DecimalTwoWayFormatter: TwoWayFormatter {
         localeId.map { formatter.locale = Locale(identifier: $0) }
     }
 
-    public func toString(_ decimal: Decimal?) -> String {
+    func toString(_ decimal: Decimal?) -> String {
         formatter.string(for: decimal) ?? ""
     }
 
-    public func fromString(_ string: String) -> Decimal? {
+    func fromString(_ string: String) -> Decimal? {
         let rawString = string.replacingOccurrences(of: formatter.groupingSeparator, with: "")
             .replacingOccurrences(of: formatter.decimalSeparator, with: ".")
         return Decimal(string: rawString)

@@ -1,6 +1,5 @@
 import Foundation
 
-
 protocol GetExchangeFeeUseCase {
     func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void)
 }
