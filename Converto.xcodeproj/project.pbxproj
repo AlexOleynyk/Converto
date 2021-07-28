@@ -17,6 +17,14 @@
 		2900352826B03D470068DC90 /* BalanceSelectionViewContorller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */; };
 		2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */; };
 		295E113426B18BD6005E57C5 /* ConvertoDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 295E113326B18BD6005E57C5 /* ConvertoDomain */; };
+		295E113626B18C51005E57C5 /* WeakRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E113526B18C51005E57C5 /* WeakRef.swift */; };
+		295E113826B18CC9005E57C5 /* RemoteRateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E113726B18CC9005E57C5 /* RemoteRateFetcher.swift */; };
+		295E113B26B18D05005E57C5 /* WalletRepositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E113A26B18D05005E57C5 /* WalletRepositories.swift */; };
+		295E113D26B18D40005E57C5 /* UpdatableCountFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E113C26B18D40005E57C5 /* UpdatableCountFetcher.swift */; };
+		295E113F26B18E4B005E57C5 /* NetworkDelaySimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E113E26B18E4B005E57C5 /* NetworkDelaySimulation.swift */; };
+		295E114126B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E114026B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift */; };
+		295E114326B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */; };
+		295E114526B18FA5005E57C5 /* ConverterFeatureComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E114426B18FA5005E57C5 /* ConverterFeatureComposer.swift */; };
 		2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676426B1437900E0549D /* KeyboardObserving.swift */; };
 		2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */; };
 		2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676926B14C9500E0549D /* TwoWayFormatter.swift */; };
@@ -39,6 +47,14 @@
 		2900351926AFF1380068DC90 /* ConvertorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorView.swift; sourceTree = "<group>"; };
 		2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionViewContorller.swift; sourceTree = "<group>"; };
 		2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionCell.swift; sourceTree = "<group>"; };
+		295E113526B18C51005E57C5 /* WeakRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRef.swift; sourceTree = "<group>"; };
+		295E113726B18CC9005E57C5 /* RemoteRateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteRateFetcher.swift; sourceTree = "<group>"; };
+		295E113A26B18D05005E57C5 /* WalletRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletRepositories.swift; sourceTree = "<group>"; };
+		295E113C26B18D40005E57C5 /* UpdatableCountFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatableCountFetcher.swift; sourceTree = "<group>"; };
+		295E113E26B18E4B005E57C5 /* NetworkDelaySimulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDelaySimulation.swift; sourceTree = "<group>"; };
+		295E114026B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingExchangeRateFetcherDecorator.swift; sourceTree = "<group>"; };
+		295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservingExchangeMoneyUseCaseDecorator.swift; sourceTree = "<group>"; };
+		295E114426B18FA5005E57C5 /* ConverterFeatureComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterFeatureComposer.swift; sourceTree = "<group>"; };
 		2996676426B1437900E0549D /* KeyboardObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserving.swift; sourceTree = "<group>"; };
 		2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalTwoWayFormatter.swift; sourceTree = "<group>"; };
 		2996676926B14C9500E0549D /* TwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoWayFormatter.swift; sourceTree = "<group>"; };
@@ -83,15 +99,18 @@
 		290034FD26AE8E360068DC90 /* Converto */ = {
 			isa = PBXGroup;
 			children = (
+				295E113926B18CEE005E57C5 /* Infrastructure */,
 				2996677126B1583C00E0549D /* Extensions */,
 				2996676626B14C6C00E0549D /* ThirdParty */,
 				2900352626B03D380068DC90 /* BalanceSelectionScreen */,
 				2900352526B03CF30068DC90 /* ConvertorScreen */,
 				290034FE26AE8E360068DC90 /* AppDelegate.swift */,
 				2900350026AE8E360068DC90 /* SceneDelegate.swift */,
+				295E114426B18FA5005E57C5 /* ConverterFeatureComposer.swift */,
 				2900350726AE8E370068DC90 /* Assets.xcassets */,
 				2900350926AE8E370068DC90 /* LaunchScreen.storyboard */,
 				2900350C26AE8E370068DC90 /* Info.plist */,
+				295E113E26B18E4B005E57C5 /* NetworkDelaySimulation.swift */,
 			);
 			path = Converto;
 			sourceTree = "<group>";
@@ -109,6 +128,7 @@
 				2900350226AE8E360068DC90 /* ConvertorViewController.swift */,
 				2900351926AFF1380068DC90 /* ConvertorView.swift */,
 				2996677826B183A000E0549D /* ConvertorPresenter.swift */,
+				295E113526B18C51005E57C5 /* WeakRef.swift */,
 			);
 			path = ConvertorScreen;
 			sourceTree = "<group>";
@@ -120,6 +140,18 @@
 				2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */,
 			);
 			path = BalanceSelectionScreen;
+			sourceTree = "<group>";
+		};
+		295E113926B18CEE005E57C5 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				295E113726B18CC9005E57C5 /* RemoteRateFetcher.swift */,
+				295E113A26B18D05005E57C5 /* WalletRepositories.swift */,
+				295E113C26B18D40005E57C5 /* UpdatableCountFetcher.swift */,
+				295E114026B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift */,
+				295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */,
+			);
+			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 		2996676326B1437000E0549D /* KeyboardHelpers */ = {
@@ -262,21 +294,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				295E113D26B18D40005E57C5 /* UpdatableCountFetcher.swift in Sources */,
 				2996676F26B14C9500E0549D /* FormattedTextFieldController.swift in Sources */,
 				2900350326AE8E360068DC90 /* ConvertorViewController.swift in Sources */,
 				2996677526B1587300E0549D /* String+Extension.swift in Sources */,
+				295E113826B18CC9005E57C5 /* RemoteRateFetcher.swift in Sources */,
 				2900352826B03D470068DC90 /* BalanceSelectionViewContorller.swift in Sources */,
+				295E114126B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift in Sources */,
 				2996677726B1589200E0549D /* UITextField+Extension.swift in Sources */,
 				290034FF26AE8E360068DC90 /* AppDelegate.swift in Sources */,
 				2996677326B1585C00E0549D /* Decimal+Extension.swift in Sources */,
 				2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */,
 				2996677026B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift in Sources */,
+				295E114526B18FA5005E57C5 /* ConverterFeatureComposer.swift in Sources */,
 				2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */,
 				2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */,
 				2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */,
 				2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */,
+				295E113626B18C51005E57C5 /* WeakRef.swift in Sources */,
 				2996677926B183A000E0549D /* ConvertorPresenter.swift in Sources */,
+				295E113F26B18E4B005E57C5 /* NetworkDelaySimulation.swift in Sources */,
+				295E114326B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift in Sources */,
 				2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */,
+				295E113B26B18D05005E57C5 /* WalletRepositories.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
