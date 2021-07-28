@@ -1,20 +1,20 @@
 import Foundation
 
-protocol GetExchangeFeeUseCase {
+public protocol GetExchangeFeeUseCase {
     func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void)
 }
 
-protocol TransactionCountFetcher {
+public protocol TransactionCountFetcher {
     func count(for balance: Balance, completion: @escaping (Int) -> Void)
 }
 
-final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCase {
+public final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCase {
     
     private let countFetcher: TransactionCountFetcher
     private let freeLimitCount: Int
     private let decoratee: GetExchangeFeeUseCase
     
-    init(
+    public init(
         countFetcher: TransactionCountFetcher,
         freeLimitCount: Int,
         decoratee: GetExchangeFeeUseCase
@@ -24,7 +24,7 @@ final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCase {
         self.decoratee = decoratee
     }
     
-    func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
+    public func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
         countFetcher.count(for: targetBalance) { [weak self] count in
             guard let self = self else { return }
             if count < self.freeLimitCount { return completion(.init(amount: 0, currency: sourceBalance.money.currency)) }
@@ -33,15 +33,15 @@ final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCase {
     }
 }
 
-final class PercentBasedGetExchangeFeeUseCase: GetExchangeFeeUseCase {
+public final class PercentBasedGetExchangeFeeUseCase: GetExchangeFeeUseCase {
     
     private let percent: Decimal
     
-    init(percent: Decimal) {
+    public init(percent: Decimal) {
         self.percent = percent
     }
     
-    func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
+    public func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
         var initialValue = amount * percent
         var result: Decimal = 0
         NSDecimalRound(&result, &initialValue, 2, .plain)

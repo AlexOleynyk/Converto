@@ -1,4 +1,5 @@
 import Foundation
+import ConvertoDomain
 
 protocol ConvertorPresantableView {
     func display(convertedAmount: String)

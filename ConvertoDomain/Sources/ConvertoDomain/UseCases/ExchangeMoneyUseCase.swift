@@ -1,20 +1,20 @@
 import Foundation
 
-protocol ExchangeMoneyUseCase {
+public protocol ExchangeMoneyUseCase {
     func exchange(command: ExchangeMoneyCommand, completion: @escaping (Bool) -> Void)
 }
 
-protocol WalletRepository {
+public protocol WalletRepository {
     func fetchWallet(completion: @escaping (Wallet) -> Void)
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void)
 }
 
-class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
+public class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
     
     private let userWalletRepository: WalletRepository
     private let bankWalletRepository: WalletRepository
     
-    init(
+    public init(
         userWalletRepository: WalletRepository,
         bankWalletRepository: WalletRepository
     ) {
@@ -22,7 +22,7 @@ class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
         self.bankWalletRepository = bankWalletRepository
     }
 
-    func exchange(command: ExchangeMoneyCommand, completion: @escaping (Bool) -> Void) {
+    public func exchange(command: ExchangeMoneyCommand, completion: @escaping (Bool) -> Void) {
         var result = true
         let group = DispatchGroup()
 
@@ -57,19 +57,19 @@ class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
     }
 }
 
-struct ExchangeMoneyCommand {
+public struct ExchangeMoneyCommand {
     
-    enum Error: Swift.Error {
+    public enum Error: Swift.Error {
         case notEnoughBalance
         case notEnoughBalanceIncludingBalance
         case zeroAmount
     }
  
-    let sourceBalance: Balance
-    let targetBalance: Balance
-    let amount: Decimal
-    let convertedAmount: Decimal
-    let fee: Decimal
+    public let sourceBalance: Balance
+    public let targetBalance: Balance
+    public let amount: Decimal
+    public let convertedAmount: Decimal
+    public let fee: Decimal
     
     private init(
         sourceBalance: Balance,
@@ -85,7 +85,7 @@ struct ExchangeMoneyCommand {
         self.fee = fee
     }
     
-    static func make(
+    public static func make(
         sourceBalance: Balance,
         targetBalance: Balance,
         amount: Decimal,

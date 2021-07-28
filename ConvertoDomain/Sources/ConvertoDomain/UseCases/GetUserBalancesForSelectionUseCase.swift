@@ -1,18 +1,18 @@
 import Foundation
 
-protocol GetUserBalancesForSelectionUseCase {
+public protocol GetUserBalancesForSelectionUseCase {
     func get(completion: @escaping ([Balance]) -> Void)
 }
 
-class GetUserBalancesForSelectionUseCaseImpl: GetUserBalancesForSelectionUseCase {
+public class GetUserBalancesForSelectionUseCaseImpl: GetUserBalancesForSelectionUseCase {
     
     private let userWalletRepository: WalletRepository
     
-    init(userWalletRepository: WalletRepository) {
+    public init(userWalletRepository: WalletRepository) {
         self.userWalletRepository = userWalletRepository
     }
     
-    func get(completion: @escaping ([Balance]) -> Void) {
+    public func get(completion: @escaping ([Balance]) -> Void) {
         userWalletRepository.fetchWallet {
             let sortedBalances = $0.balances
                 .sorted {

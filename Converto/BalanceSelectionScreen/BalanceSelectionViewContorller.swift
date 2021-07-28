@@ -1,5 +1,6 @@
 import UIKit
 import ConvertoKit
+import ConvertoDomain
 
 final class BalanceSelectionViewContorller: UITableViewController {
     
