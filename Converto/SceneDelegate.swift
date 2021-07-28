@@ -14,6 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func makeConvertorViewController() -> ConvertorViewController {
         let countFetcher = UpdatableCountFetcher()
+        let increaseCountOnSuccess: (Bool) -> Void = { if $0 { countFetcher.increaseCount() } }
         let controller = ConvertorViewController(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
@@ -25,8 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 decoratee: ExchangeMoneyUseCaseImpl(
                     userWalletRepository: userWalletRepository,
                     bankWalletRepository: BankWalletRepository()
-                )
-            ) { if $0 { countFetcher.increaseCount()} },
+                ),
+                callback: increaseCountOnSuccess
+            ),
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
                     decoratee: RemoteRateFetcher()
@@ -37,21 +39,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return controller
     }
     
-    private func makeBalanceSelectionViewContorller() -> BalanceSelectionViewContorller {
-        BalanceSelectionViewContorller(
+    private func makeBalanceSelectionViewContorller(excludedBalance: Balance?) -> BalanceSelectionViewContorller {
+        let repository: WalletRepository = excludedBalance.map {
+            ExcludingWalletRepositoryDecorator(
+                decoratee: userWalletRepository,
+                exculedBalance: $0
+            )
+        } ?? userWalletRepository
+        
+        return BalanceSelectionViewContorller(
             getUserWalleUseCase: GetUserBalancesForSelectionUseCaseImpl(
-                userWalletRepository: userWalletRepository
+                userWalletRepository: repository
             )
         )
     }
     
-    private func routeToBalanceSelection(with type: ConvertorViewController.CurrencySelectionType, selectedBalance: Balance) {
-        let balanceSelectionController =  makeBalanceSelectionViewContorller()
-        let isSourceBalance = type == .source
-        balanceSelectionController.shouldDimmZeroBalances = isSourceBalance
+    private func routeToBalanceSelection(
+        with type: ConvertorViewController.CurrencySelectionType,
+        sourceBalance: Balance,
+        targetBalance: Balance
+    ) {
+        let selectedBalance = type.isSource ? sourceBalance : targetBalance
+        let excludedBalance = type.isSource ? nil : sourceBalance
+        let balanceSelectionController =  makeBalanceSelectionViewContorller(excludedBalance: excludedBalance)
+        balanceSelectionController.shouldDimmZeroBalances = type.isSource
         balanceSelectionController.selectedBalance = selectedBalance
         balanceSelectionController.onBalanceSelected = { [weak self] selectedBalance in
-            if isSourceBalance {
+            if type.isSource {
                 self?.convertorViewController.sourceBalance = selectedBalance
             } else {
                 self?.convertorViewController.targetBalance = selectedBalance
@@ -81,7 +95,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 private class UserWalletRepository: WalletRepository, UserBalanceFetcher {
     private var mockWallet = Wallet(balances: [
         Balance(id: 1, money: Money(amount: 0, currency: Currency(id: 1, code: "USD"))),
-        Balance(id: 2, money: Money(amount: 100, currency: Currency(id: 2, code: "EUR")))
+        Balance(id: 2, money: Money(amount: 1000, currency: Currency(id: 2, code: "EUR"))),
+        Balance(id: 3, money: Money(amount: 0, currency: Currency(id: 3, code: "JPY")))
     ])
 
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
@@ -102,10 +117,34 @@ private class UserWalletRepository: WalletRepository, UserBalanceFetcher {
     }
 }
 
+private class ExcludingWalletRepositoryDecorator: WalletRepository {
+    
+    private let decoratee: WalletRepository
+    private let exculedBalance: Balance
+    
+    init(decoratee: WalletRepository, exculedBalance: Balance) {
+        self.decoratee = decoratee
+        self.exculedBalance = exculedBalance
+    }
+    
+    func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
+        decoratee.updateWallet(wallet, completion: completion)
+    }
+    
+    func fetchWallet(completion: @escaping (Wallet) -> Void) {
+        decoratee.fetchWallet(completion: { [weak self] wallet in
+            let newWallet = Wallet(balances: wallet.balances.filter { $0.id != self?.exculedBalance.id } )
+            completion(newWallet)
+        })
+    }
+    
+}
+
 private class BankWalletRepository: WalletRepository {
     private var bankWallet = Wallet(balances: [
         Balance(id: 1, money: Money(amount: 0, currency: Currency(id: 1, code: "USD"))),
-        Balance(id: 2, money: Money(amount: 0, currency: Currency(id: 2, code: "EUR")))
+        Balance(id: 2, money: Money(amount: 0, currency: Currency(id: 2, code: "EUR"))),
+        Balance(id: 3, money: Money(amount: 0, currency: Currency(id: 3, code: "JPY")))
     ])
 
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {

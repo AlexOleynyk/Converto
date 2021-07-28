@@ -6,6 +6,8 @@ final class ConvertorViewController: UIViewController {
     enum CurrencySelectionType {
         case source
         case target
+        
+        var isSource: Bool { self == .source }
     }
     
     let convertorView = ConvertorView()
@@ -17,7 +19,7 @@ final class ConvertorViewController: UIViewController {
     
     var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
     
-    var onCurrencySelectionTap: ((CurrencySelectionType, Balance) -> Void)?
+    var onCurrencySelectionTap: ((CurrencySelectionType, Balance, Balance) -> Void)?
 
     var sourceBalance: Balance? {
         didSet { updateSourceBalance() }
@@ -72,10 +74,10 @@ final class ConvertorViewController: UIViewController {
     }
     
     private func updateBalances() {
-        getBalanceUseCase.get(currency: .init(id: 1, code: "USD")) { [weak self] in
+        getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? .init(id: 2, code: "EUR")) { [weak self] in
             self?.sourceBalance = $0
         }
-        getBalanceUseCase.get(currency: .init(id: 2, code: "EUR")) { [weak self] in
+        getBalanceUseCase.get(currency: targetBalance?.money.currency ?? .init(id: 1, code: "USD")) { [weak self] in
             self?.targetBalance = $0
         }
         
@@ -157,9 +159,10 @@ final class ConvertorViewController: UIViewController {
     }
     
     @objc private func onCurrencySelectionTap(_ moneyField: MoneyField) {
-        let type: CurrencySelectionType = moneyField == convertorView.targetMoneyField.moneyField ? .target : .source
-        guard let balance = type == .source ? sourceBalance : targetBalance else { return }
-        onCurrencySelectionTap?(type, balance)
+        if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
+            let type: CurrencySelectionType = moneyField == convertorView.targetMoneyField.moneyField ? .target : .source
+            onCurrencySelectionTap?(type, sourceBalance, targetBalance)
+        }
     }
     
     private func enteredAmount() -> Decimal {

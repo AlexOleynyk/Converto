@@ -25,6 +25,7 @@ final class BalanceSelectionViewContorller: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Select balance"
         tableView.registerReusableCell(BalanceSelectionCell.self)
         tableView.contentInset = .init(top: 8, left: 0, bottom: 8, right: 0)
         tableView.separatorStyle = .none
