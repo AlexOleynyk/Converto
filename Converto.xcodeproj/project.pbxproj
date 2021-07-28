@@ -22,6 +22,7 @@
 		2900352826B03D470068DC90 /* BalanceSelectionViewContorller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */; };
 		2900352A26B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */; };
 		2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */; };
+		2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676426B1437900E0549D /* KeyboardObserving.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		2900352726B03D470068DC90 /* BalanceSelectionViewContorller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionViewContorller.swift; sourceTree = "<group>"; };
 		2900352926B0418C0068DC90 /* GetUserBalancesForSelectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserBalancesForSelectionUseCase.swift; sourceTree = "<group>"; };
 		2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSelectionCell.swift; sourceTree = "<group>"; };
+		2996676426B1437900E0549D /* KeyboardObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserving.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 		290034FD26AE8E360068DC90 /* Converto */ = {
 			isa = PBXGroup;
 			children = (
+				2996676326B1437000E0549D /* KeyboardHelpers */,
 				2900352626B03D380068DC90 /* BalanceSelectionScreen */,
 				2900352526B03CF30068DC90 /* ConvertorScreen */,
 				2900351626AFEF930068DC90 /* Domain */,
@@ -123,6 +126,14 @@
 				2900352B26B04EA00068DC90 /* BalanceSelectionCell.swift */,
 			);
 			path = BalanceSelectionScreen;
+			sourceTree = "<group>";
+		};
+		2996676326B1437000E0549D /* KeyboardHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				2996676426B1437900E0549D /* KeyboardObserving.swift */,
+			);
+			path = KeyboardHelpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,6 +237,7 @@
 				2900352C26B04EA00068DC90 /* BalanceSelectionCell.swift in Sources */,
 				2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */,
 				2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */,
+				2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */,
 				2900351E26B011CD0068DC90 /* GetExchangeFeeUseCase.swift in Sources */,
 				2900351C26B011040068DC90 /* GetUserBalancesUseCase.swift in Sources */,
 				2900352026B01C510068DC90 /* GetExchangedAmountUseCase.swift in Sources */,

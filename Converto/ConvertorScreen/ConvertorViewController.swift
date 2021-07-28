@@ -54,7 +54,7 @@ final class ConvertorViewController: UIViewController {
         super.viewDidLoad()
         
         title = "Currency converter"
-        
+        registerForKeyboardEvents()
         
         updateBalances()
         convertorView.convertButton.setTitle("Exchange", for: [])
@@ -175,3 +175,12 @@ final class ConvertorViewController: UIViewController {
     }
 }
 
+extension ConvertorViewController: KeyboardObserving {
+    func keyboardWillShow(_ notification: Notification) {
+        convertorView.adjustForKeyboardHeight(height: notification.keyboardSize?.height ?? 0)
+    }
+    
+    func keyboardWillHide(_ notification: Notification) {
+        convertorView.adjustForKeyboardHeight(height: 0)
+    }
+}

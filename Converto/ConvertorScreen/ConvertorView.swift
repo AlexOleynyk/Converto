@@ -15,6 +15,7 @@ final class ConvertorView: UIView {
     let feeView = TitleView()
     
     let convertButton = PrimaryButton()
+    private var bottomConstraint: NSLayoutConstraint!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,11 +44,11 @@ final class ConvertorView: UIView {
             container.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             container.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
-        
+        bottomConstraint = convertButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20)
         addSubview(convertButton, constraints: [
             convertButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             convertButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            convertButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            bottomConstraint
         ])
     }
     
@@ -72,6 +73,17 @@ final class ConvertorView: UIView {
             view.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -insets.bottom)
         ])
         return wrapper
+    }
+    
+    func adjustForKeyboardHeight(height: CGFloat) {
+        if height == 0 {
+            bottomConstraint.constant = -20
+        } else {
+            bottomConstraint.constant = -height - 20  + safeAreaInsets.bottom
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
+        }
     }
     
     @available(*, unavailable)
