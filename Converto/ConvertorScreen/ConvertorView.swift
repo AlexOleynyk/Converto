@@ -83,11 +83,7 @@ final class ConvertorView: UIView {
     }
 
     func adjustForKeyboardHeight(height: CGFloat) {
-        if height == 0 {
-            bottomConstraint.constant = -20
-        } else {
-            bottomConstraint.constant = -height - 20  + safeAreaInsets.bottom
-        }
+        bottomConstraint.constant = height == 0 ? -20 : -height - 20  + safeAreaInsets.bottom
         UIView.animate(withDuration: 0.3) {
             self.layoutIfNeeded()
         }
