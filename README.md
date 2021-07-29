@@ -6,7 +6,7 @@ Project widely uses Dependency Injection with initializers and sometimes with Pr
 
 ## Converter screen composition diagram
 
-![](https://github.com/AlexOleynyk/Converto/blob/master/ReadmeResources/Converto.png)
+![](/ReadmeResources/Converto.png)
 
 ## Features
 
