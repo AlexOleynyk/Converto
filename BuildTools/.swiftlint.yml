@@ -1,0 +1,23 @@
+disabled_rules:
+- trailing_whitespace
+- cyclomatic_complexity
+- type_body_length
+- nesting
+
+excluded:
+- BuildTools
+- builds
+- Build
+- build
+- DerivedData
+- vendor/bundle
+- spm_deps
+
+function_body_length: 160
+line_length: 180
+file_length: 500
+
+identifier_name:
+    max_length: 45
+    excluded:
+      - id

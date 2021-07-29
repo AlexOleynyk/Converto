@@ -5,7 +5,7 @@ struct ApiResource<T: Decodable> {
 }
 
 final class ApiRequest {
-    
+
     enum Error: Swift.Error {
         case decodingFailure
         case connectivity
