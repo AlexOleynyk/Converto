@@ -23,7 +23,7 @@ public class RateBasedGetExchangedAmountUseCase: GetExchangedAmountUseCase {
     }
 }
 
-extension Decimal {
+public extension Decimal {
     func rounded(scale: Int = 2, roundingMode: NSDecimalNumber.RoundingMode = .plain) -> Decimal {
         var amountBefore = self
         var result: Decimal = self

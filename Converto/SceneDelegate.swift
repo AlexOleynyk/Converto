@@ -5,10 +5,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     private lazy var rootController = UINavigationController(
-        rootViewController: converterFeatureComposer.rootController
+        rootViewController: convertorFeatureComposer.rootController
     )
 
-    private lazy var converterFeatureComposer = ConverterFeatureComposer()
+    private lazy var convertorFeatureComposer = ConvertorFeatureComposer()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }

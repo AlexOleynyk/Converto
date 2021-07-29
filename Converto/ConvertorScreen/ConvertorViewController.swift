@@ -13,10 +13,16 @@ final class ConvertorViewController: UIViewController {
     var onCurrencySelectionTap: ((CurrencySelectionType) -> Void)?
     var presenter: ConvertorPresenter?
 
-    private let decimalFieldController: UITextFieldDelegate
+    var decimalFieldController: FormattedTextFieldController {
+        didSet {
+            convertorView.sourceMoneyField.moneyField.inputField.delegate = decimalFieldController
+            decimalFieldController.update(convertorView.sourceMoneyField.moneyField.inputField)
+        }
+    }
+    
     private let convertorView = ConvertorView()
 
-    init(decimalFieldController: UITextFieldDelegate) {
+    init(decimalFieldController: FormattedTextFieldController) {
         self.decimalFieldController = decimalFieldController
         super.init(nibName: nil, bundle: nil)
         self.convertorView.sourceMoneyField.moneyField.inputField.delegate = decimalFieldController
@@ -37,11 +43,11 @@ final class ConvertorViewController: UIViewController {
     private func configureView() {
         convertorView.convertButton.setTitle("Exchange", for: [])
 
-        convertorView.sourceMoneyField.moneyField.inputField.placeholder = "0.00"
+        convertorView.sourceMoneyField.moneyField.inputField.text = "0"
         convertorView.sourceMoneyField.titleView.titleLabel.text = "Sell"
         convertorView.sourceMoneyField.titleView.iconView.image = Asset.Icons.sellArrow.image
 
-        convertorView.targetMoneyField.moneyField.inputField.placeholder = "0.00"
+        convertorView.targetMoneyField.moneyField.inputField.text = "0"
         convertorView.targetMoneyField.titleView.titleLabel.text = "Receive"
         convertorView.targetMoneyField.titleView.iconView.image = Asset.Icons.receiveArrow.image
 

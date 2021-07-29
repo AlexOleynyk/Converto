@@ -73,11 +73,19 @@ private final class ReplacingAttempt {
     private var resultForLastSymbol: String? {
         let lastSymbol = replacedString.last.map(String.init)
         if lastSymbol == decimalSeparator {
-            return (valueFromString.map(twoWayFormatter.toString) ?? originalString) + decimalSeparator
+            return resultForFractionalFormatter
         } else if lastSymbol == zeroSymbol, let tail = replacedString.components(separatedBy: decimalSeparator).last {
             return ((valueFromString?.whole).map(twoWayFormatter.toString) ?? originalString) + decimalSeparator + tail
         }
         return nil
+    }
+    
+    private var resultForFractionalFormatter: String? {
+        if twoWayFormatter.formatter.maximumFractionDigits == 0,
+           correctedReplacement == decimalSeparator {
+            return valueFromString.map(twoWayFormatter.toString)
+        }
+        return (valueFromString.map(twoWayFormatter.toString) ?? originalString) + decimalSeparator
     }
 
     private func cursorPositionOffset(formatted: String) -> Int {

@@ -1,31 +1,37 @@
 import UIKit
 import ConvertoDomain
 
-final class ConverterFeatureComposer {
+final class ConvertorFeatureComposer {
 
     var rootController: UIViewController {
         convertorViewController
     }
 
+    private let decimalFormaterProvider = DecimalFormaterProvider()
     private lazy var convertorViewController = makeConvertorViewController()
     private lazy var userWalletRepository: WalletRepository & UserBalanceFetcher = UserWalletRepository()
 
     private func makeConvertorViewController() -> ConvertorViewController {
         let countFetcher = UpdatableCountFetcher()
         let increaseTargetBalanceCountOnSuccess: (ExchangeMoneyCommand, Bool) -> Void = { if $1 { countFetcher.increaseCount(for: $0.targetBalance) } }
-        let decimalFormatter = DecimalTwoWayFormatter()
-        let decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
+        let sourceCurrency = Currency.makeJpy()
+        let targetCurrency = Currency.makeUsd()
+        let sourceDecimalFormatter = decimalFormaterProvider.makeDecimalFormatter(for: sourceCurrency)
+        let sourceDecimalFieldController = FormattedTextFieldController(twoWayFormatter: sourceDecimalFormatter)
 
-        let controller = ConvertorViewController(decimalFieldController: decimalFieldController)
+        let controller = ConvertorViewController(decimalFieldController: sourceDecimalFieldController)
 
         let errorAdapter = ErrorHandlerAdapter()
 
         let presenter = ConvertorPresenter(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
-            getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
+            getFeeUseCase: LimitBasedGetExchangeFeeUseCaseDecorator(
                 countFetcher: countFetcher,
                 freeLimitCount: 5,
-                decoratee: PercentBasedGetExchangeFeeUseCase(percent: 0.007)
+                decoratee: RoundingGetExchangeFeeUseCaseDecorator(
+                    currency: .makeJpy(),
+                    decoratee: PercentBasedGetExchangeFeeUseCase(percent: 0.007)
+                )
             ),
             exchangeMoneyUseCase: ObservingExchangeMoneyUseCaseDecorator(
                 decoratee: ExchangeMoneyUseCaseImpl(
@@ -36,15 +42,19 @@ final class ConverterFeatureComposer {
             ),
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
-                    decoratee: RemoteRateFetcher(
-                        request: ApiRequest(),
-                        errorHandler: errorAdapter.handleError
+                    decoratee: RoundingRateFetcherDecorator(
+                        currency: .makeJpy(),
+                        decoratee: RemoteRateFetcher(
+                            request: ApiRequest(),
+                            errorHandler: errorAdapter.handleError
+                        )
                     )
                 )
             ),
-            decimalFormatter: decimalFormatter,
-            inititalSourceCurrency: .makeEur(),
-            inititalTargetCurrency: .makeUsd()
+            sourceBalanceFormatter: sourceDecimalFormatter,
+            targetBalanceFormatter: decimalFormaterProvider.makeDecimalFormatter(for: targetCurrency),
+            inititalSourceCurrency: sourceCurrency,
+            inititalTargetCurrency: targetCurrency
         )
         controller.presenter = presenter
         presenter.presantableView = WeakRef(controller)
@@ -67,14 +77,15 @@ final class ConverterFeatureComposer {
         return controller
     }
 
-    private func makeBalanceSelectionViewContorller(excludedBalance: Balance) -> BalanceSelectionViewContorller {
-        BalanceSelectionViewContorller(
+    private func makeBalanceSelectionViewContorller(excludedBalance: Balance) -> BalanceSelectionViewController {
+        BalanceSelectionViewController(
             getUserWalleUseCase: GetUserBalancesForSelectionUseCaseImpl(
                 userWalletRepository: ExcludingWalletRepositoryDecorator(
                     decoratee: userWalletRepository,
                     exculedBalance: excludedBalance
                 )
-            )
+            ),
+            decimalFormatterForCurrency: decimalFormaterProvider.makeDecimalFormatter
         )
     }
 
@@ -89,10 +100,13 @@ final class ConverterFeatureComposer {
         balanceSelectionController.shouldDimmZeroBalances = type.isSource
         balanceSelectionController.selectedBalance = selectedBalance
         balanceSelectionController.onBalanceSelected = { [weak self] selectedBalance in
+            guard let self = self else { return }
+            let formatter = self.decimalFormaterProvider.makeDecimalFormatter(for: selectedBalance.money.currency)
             if type.isSource {
-                self?.convertorViewController.presenter?.sourceBalance = selectedBalance
+                self.convertorViewController.decimalFieldController = FormattedTextFieldController(twoWayFormatter: formatter)
+                self.convertorViewController.presenter?.setSource(balance: selectedBalance, formatter: formatter)
             } else {
-                self?.convertorViewController.presenter?.targetBalance = selectedBalance
+                self.convertorViewController.presenter?.setTarget(balance: selectedBalance, formatter: formatter)
             }
         }
         rootController.present(

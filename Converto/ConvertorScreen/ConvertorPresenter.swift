@@ -17,22 +17,20 @@ protocol ConvertorPresantableView: ConvertedAmountView, FeeAmountView {
 }
 
 final class ConvertorPresenter {
+    
     var presantableView: ConvertorPresantableView?
-
-    var sourceBalance: Balance? {
-        didSet { updateSourceBalance() }
-    }
-    var targetBalance: Balance? {
-        didSet { updateTargetBalance() }
-    }
 
     private let getBalanceUseCase: GetUserBalancesUseCase
     private let getFeeUseCase: GetExchangeFeeUseCase
     private let exchangeMoneyUseCase: ExchangeMoneyUseCase
     private let getExchangedAmountUseCase: GetExchangedAmountUseCase
-    private let decimalFormatter: DecimalTwoWayFormatter
     private let inititalSourceCurrency: Currency
     private let inititalTargetCurrency: Currency
+    
+    private var sourceBalanceFormatter: DecimalTwoWayFormatter
+    private(set) var sourceBalance: Balance?
+    private var targetBalanceFormatter: DecimalTwoWayFormatter
+    private(set) var targetBalance: Balance?
     
     private var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
     private var enteredAmount: Decimal = 0
@@ -42,7 +40,8 @@ final class ConvertorPresenter {
         getFeeUseCase: GetExchangeFeeUseCase,
         exchangeMoneyUseCase: ExchangeMoneyUseCase,
         getExchangedAmountUseCase: GetExchangedAmountUseCase,
-        decimalFormatter: DecimalTwoWayFormatter,
+        sourceBalanceFormatter: DecimalTwoWayFormatter,
+        targetBalanceFormatter: DecimalTwoWayFormatter,
         inititalSourceCurrency: Currency,
         inititalTargetCurrency: Currency
     ) {
@@ -50,19 +49,34 @@ final class ConvertorPresenter {
         self.getFeeUseCase = getFeeUseCase
         self.exchangeMoneyUseCase = exchangeMoneyUseCase
         self.getExchangedAmountUseCase = getExchangedAmountUseCase
-        self.decimalFormatter = decimalFormatter
+        self.sourceBalanceFormatter = sourceBalanceFormatter
+        self.targetBalanceFormatter = targetBalanceFormatter
         self.inititalSourceCurrency = inititalSourceCurrency
         self.inititalTargetCurrency = inititalTargetCurrency
+    }
+    
+    func setSource(balance: Balance, formatter: DecimalTwoWayFormatter) {
+        sourceBalance = balance
+        sourceBalanceFormatter = formatter
+        updateSourceBalance()
+    }
+    
+    func setTarget(balance: Balance, formatter: DecimalTwoWayFormatter) {
+        targetBalance = balance
+        targetBalanceFormatter = formatter
+        updateTargetBalance()
     }
 
     func updateBalances() {
         presantableView?.display(isLoading: true)
         getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? inititalSourceCurrency) { [weak self] in
             self?.sourceBalance = $0
+            self?.updateSourceBalance()
             self?.presantableView?.display(isLoading: false)
         }
         getBalanceUseCase.get(currency: targetBalance?.money.currency ?? inititalTargetCurrency) { [weak self] in
             self?.targetBalance = $0
+            self?.updateTargetBalance()
             self?.presantableView?.display(isLoading: false)
         }
 
@@ -82,13 +96,13 @@ final class ConvertorPresenter {
     }
 
     func onSourceAmountChange(amount: String) {
-        enteredAmount = decimalFormatter.fromString(amount) ?? 0
+        enteredAmount = sourceBalanceFormatter.fromString(amount) ?? 0
         updateExchangedAmount()
     }
 
     private func updateSourceBalance() {
         presantableView?.display(
-            sourceBalanceAmount: "Available: \(sourceBalance?.money.amount ?? 0)",
+            sourceBalanceAmount: "Available: \(sourceBalanceFormatter.toString(sourceBalance?.money.amount ?? 0))",
             currency: sourceBalance?.money.currency.code ?? ""
         )
         updateExchangedAmount()
@@ -96,7 +110,7 @@ final class ConvertorPresenter {
 
     private func updateTargetBalance() {
         presantableView?.display(
-            targetBalanceAmount: "Available: \(targetBalance?.money.amount ?? 0)",
+            targetBalanceAmount: "Available: \(targetBalanceFormatter.toString(targetBalance?.money.amount ?? 0))",
             currency: targetBalance?.money.currency.code ?? ""
         )
         updateExchangedAmount()
@@ -106,13 +120,14 @@ final class ConvertorPresenter {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
 
             getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount) { [weak self] fees in
-                self?.presantableView?.display(
-                    feeAmount: "\(fees.amount) \(fees.currency.code)",
+                guard let self = self else { return }
+                self.presantableView?.display(
+                    feeAmount: "\(self.sourceBalanceFormatter.toString(fees.amount)) \(fees.currency.code)",
                     description: fees.amount > 0 ? "Commission fee" : "No fee commission",
                     isPositive: fees.amount > 0
                 )
 
-                self?.checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
+                self.checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
             }
         }
     }
@@ -137,7 +152,7 @@ final class ConvertorPresenter {
     private func updateExchangedAmount() {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
             getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount) { [weak self] in
-                self?.presantableView?.display(convertedAmount: self?.decimalFormatter.toString($0.amount) ?? "")
+                self?.presantableView?.display(convertedAmount: self?.targetBalanceFormatter.toString($0.amount) ?? "")
                 self?.updateFees(amount: self?.enteredAmount ?? 0, convertedAmount: $0.amount)
 
             }

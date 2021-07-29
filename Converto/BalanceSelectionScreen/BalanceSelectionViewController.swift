@@ -2,7 +2,7 @@ import UIKit
 import ConvertoKit
 import ConvertoDomain
 
-final class BalanceSelectionViewContorller: UITableViewController {
+final class BalanceSelectionViewController: UITableViewController {
 
     var shouldDimmZeroBalances: Bool = false {
         didSet { tableView.reloadData() }
@@ -15,12 +15,17 @@ final class BalanceSelectionViewContorller: UITableViewController {
     var onBalanceSelected: ((Balance) -> Void)?
 
     private let getUserWalleUseCase: GetUserBalancesForSelectionUseCase
+    private let decimalFormatterForCurrency: (Currency) -> DecimalTwoWayFormatter
     private var balances: [Balance] = [] {
         didSet { tableView.reloadData() }
     }
 
-    init(getUserWalleUseCase: GetUserBalancesForSelectionUseCase) {
+    init(
+        getUserWalleUseCase: GetUserBalancesForSelectionUseCase,
+        decimalFormatterForCurrency: @escaping (Currency) -> DecimalTwoWayFormatter
+    ) {
         self.getUserWalleUseCase = getUserWalleUseCase
+        self.decimalFormatterForCurrency = decimalFormatterForCurrency
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -54,7 +59,7 @@ final class BalanceSelectionViewContorller: UITableViewController {
             return UITableViewCell()
         }
         let balance = balances[indexPath.row]
-        cell.selectionView.amountLabel.text = "\(balance.money.amount)"
+        cell.selectionView.amountLabel.text = "\(decimalFormatterForCurrency(balance.money.currency).toString(balance.money.amount))"
         cell.selectionView.currencyLabel.text = "\(balance.money.currency.code)"
         cell.selectionView.layer.opacity = shouldDimmZeroBalances && balance.money.amount == 0 ? 0.2 : 1
         cell.isUserInteractionEnabled = !(shouldDimmZeroBalances && balance.money.amount == 0)

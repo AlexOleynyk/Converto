@@ -12,6 +12,10 @@ final class FormattedTextFieldController: NSObject, UITextFieldDelegate {
         self.twoWayFormatter = twoWayFormatter
         super.init()
     }
+    
+    func update(_ textField: UITextField) {
+        textField.text = twoWayFormatter.formattedString(textField.text.orEmpty)
+    }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let (newText, cursorOffset) = twoWayFormatter.replacingCharacters(string: textField.text.orEmpty, in: range, with: string)
