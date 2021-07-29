@@ -25,6 +25,7 @@
 		295E114126B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E114026B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift */; };
 		295E114326B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */; };
 		295E114526B18FA5005E57C5 /* ConverterFeatureComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295E114426B18FA5005E57C5 /* ConverterFeatureComposer.swift */; };
+		296B4A8026B2854E00ACC522 /* ApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B4A7F26B2854E00ACC522 /* ApiRequest.swift */; };
 		2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676426B1437900E0549D /* KeyboardObserving.swift */; };
 		2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */; };
 		2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676926B14C9500E0549D /* TwoWayFormatter.swift */; };
@@ -55,6 +56,7 @@
 		295E114026B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingExchangeRateFetcherDecorator.swift; sourceTree = "<group>"; };
 		295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservingExchangeMoneyUseCaseDecorator.swift; sourceTree = "<group>"; };
 		295E114426B18FA5005E57C5 /* ConverterFeatureComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterFeatureComposer.swift; sourceTree = "<group>"; };
+		296B4A7F26B2854E00ACC522 /* ApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRequest.swift; sourceTree = "<group>"; };
 		2996676426B1437900E0549D /* KeyboardObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserving.swift; sourceTree = "<group>"; };
 		2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalTwoWayFormatter.swift; sourceTree = "<group>"; };
 		2996676926B14C9500E0549D /* TwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoWayFormatter.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 		290034FD26AE8E360068DC90 /* Converto */ = {
 			isa = PBXGroup;
 			children = (
+				296B4A7E26B2853B00ACC522 /* Network */,
 				295E113926B18CEE005E57C5 /* Infrastructure */,
 				2996677126B1583C00E0549D /* Extensions */,
 				2996676626B14C6C00E0549D /* ThirdParty */,
@@ -152,6 +155,14 @@
 				295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */,
 			);
 			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		296B4A7E26B2853B00ACC522 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				296B4A7F26B2854E00ACC522 /* ApiRequest.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		2996676326B1437000E0549D /* KeyboardHelpers */ = {
@@ -327,6 +338,7 @@
 				2996677026B14C9500E0549D /* DecimalTwoWayFormatter+RangeReplacer.swift in Sources */,
 				295E114526B18FA5005E57C5 /* ConverterFeatureComposer.swift in Sources */,
 				2900351A26AFF1380068DC90 /* ConvertorView.swift in Sources */,
+				296B4A8026B2854E00ACC522 /* ApiRequest.swift in Sources */,
 				2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */,
 				2900350126AE8E360068DC90 /* SceneDelegate.swift in Sources */,
 				2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */,

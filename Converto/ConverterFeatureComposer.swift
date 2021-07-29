@@ -34,7 +34,7 @@ final class ConverterFeatureComposer {
             ),
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
-                    decoratee: RemoteRateFetcher()
+                    decoratee: RemoteRateFetcher(request: ApiRequest())
                 )
             ),
             decimalFormatter: decimalFormatter
