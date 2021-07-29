@@ -14,7 +14,7 @@ final class FormattedTextFieldController: NSObject, UITextFieldDelegate {
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let (newText, cursorOffset) = twoWayFormatter.replacingCharacters(string: textField.textOrEmpty, in: range, with: string)
+        let (newText, cursorOffset) = twoWayFormatter.replacingCharacters(string: textField.text.orEmpty, in: range, with: string)
         textField.text = newText
         textField.setCursorOffset(cursorOffset)
         textField.sendActions(for: .editingChanged)
@@ -22,7 +22,7 @@ final class FormattedTextFieldController: NSObject, UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.text = twoWayFormatter.formattedString(textField.textOrEmpty)
+        textField.text = twoWayFormatter.formattedString(textField.text.orEmpty)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
