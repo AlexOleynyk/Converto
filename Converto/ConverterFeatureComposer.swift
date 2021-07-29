@@ -90,7 +90,7 @@ final class ConverterFeatureComposer {
             }
         }
         rootController.present(
-            UINavigationController(rootViewController: makeConvertorViewController()),
+            UINavigationController(rootViewController: balanceSelectionController),
             animated: true
         )
     }
