@@ -50,7 +50,9 @@ final class BalanceSelectionViewContorller: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: BalanceSelectionCell = tableView.dequeueReusableCell(for: indexPath)
+        guard let cell: BalanceSelectionCell = tableView.dequeueReusableCell(for: indexPath) else {
+            return UITableViewCell()
+        }
         let balance = balances[indexPath.row]
         cell.selectionView.amountLabel.text = "\(balance.money.amount)"
         cell.selectionView.currencyLabel.text = "\(balance.money.currency.code)"
