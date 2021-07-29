@@ -25,7 +25,7 @@ final class ConverterFeatureComposer {
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
                 countFetcher: countFetcher,
-                freeLimitCount: 2,
+                freeLimitCount: 5,
                 decoratee: PercentBasedGetExchangeFeeUseCase(percent: 0.007)
             ),
             exchangeMoneyUseCase: ObservingExchangeMoneyUseCaseDecorator(

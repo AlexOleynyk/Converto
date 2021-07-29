@@ -62,6 +62,7 @@ public struct ExchangeMoneyCommand {
         case notEnoughBalance
         case notEnoughBalanceIncludingBalance
         case zeroAmount
+        case zeroConvertedAmount
     }
 
     public let sourceBalance: Balance
@@ -97,9 +98,11 @@ public struct ExchangeMoneyCommand {
         guard sourceBalance.money.amount >= amount else {
             return .failure(.notEnoughBalance)
         }
-
         guard sourceBalance.money.amount >= amount + fee else {
             return .failure(.notEnoughBalanceIncludingBalance)
+        }
+        guard convertedAmount > 0 else {
+            return .failure(.zeroConvertedAmount)
         }
 
         return .success(ExchangeMoneyCommand(

@@ -16,14 +16,14 @@ final class RemoteRateFetcher: ExchangeRateFetcher {
 
     func get(sourceMoney: Money, targetMoney: Money, completion: @escaping (Decimal) -> Void) {
         let resource = ApiResource<RateResponseDTO>(
-            path: "/currency/commercial/exchange/1-\(sourceMoney.currency.code)/\(targetMoney.currency.code)/latest"
+            path: "/currency/commercial/exchange/1000-\(sourceMoney.currency.code)/\(targetMoney.currency.code)/latest"
         )
 
         request.get(resource: resource) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case let .success(rates):
-                    completion(Decimal(string: rates.amount) ?? 1)
+                    completion((Decimal(string: rates.amount) ?? 1000) / 1000)
                 case let .failure(error):
                     self?.errorHandler(error)
                 }
