@@ -74,7 +74,7 @@ private final class ReplacingAttempt {
         let lastSymbol = replacedString.last.map(String.init)
         if lastSymbol == decimalSeparator {
             return (valueFromString.map(twoWayFormatter.toString) ?? originalString) + decimalSeparator
-        } else if lastSymbol == "0", let tail = replacedString.components(separatedBy: decimalSeparator).last {
+        } else if lastSymbol == zeroSymbol, let tail = replacedString.components(separatedBy: decimalSeparator).last {
             return ((valueFromString?.whole).map(twoWayFormatter.toString) ?? originalString) + decimalSeparator + tail
         }
         return nil
@@ -102,6 +102,10 @@ private final class ReplacingAttempt {
 
     private var decimalSeparator: String {
         twoWayFormatter.formatter.decimalSeparator
+    }
+    
+    private var zeroSymbol: String {
+        "0"
     }
 
     private var correctedRange: NSRange {
