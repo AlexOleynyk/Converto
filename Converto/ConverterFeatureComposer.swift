@@ -17,9 +17,8 @@ final class ConverterFeatureComposer {
         let decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
 
         let controller = ConvertorViewController(decimalFieldController: decimalFieldController)
-        
-        let errorPresenter = RatesFetcherErrorPresenter()
-        errorPresenter.erorrView = WeakRef(controller)
+
+        let errorAdapter = ErrorHandlerAdapter()
 
         let presenter = ConvertorPresenter(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
@@ -39,7 +38,7 @@ final class ConverterFeatureComposer {
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
                     decoratee: RemoteRateFetcher(
                         request: ApiRequest(),
-                        errorHandler: errorPresenter.show
+                        errorHandler: errorAdapter.handleError
                     )
                 )
             ),
@@ -49,6 +48,13 @@ final class ConverterFeatureComposer {
         )
         controller.presenter = presenter
         presenter.presantableView = WeakRef(controller)
+        
+        let errorPresenter = RatesFetcherErrorPresenter()
+        errorPresenter.errorView = WeakRef(controller)
+        errorAdapter.errorPresenter = errorPresenter
+        errorAdapter.convertedView = WeakRef(controller)
+        errorAdapter.feeAmountView = WeakRef(controller)
+        
         controller.onCurrencySelectionTap = { type in
             guard let sourceBalance = presenter.sourceBalance, let targetBalance = presenter.targetBalance else { return }
             self.routeToBalanceSelection(
@@ -96,11 +102,19 @@ final class ConverterFeatureComposer {
     }
 }
 
-extension WeakRef: ConvertorPresantableView where T: ConvertorPresantableView {
+extension WeakRef: FeeAmountView where T: FeeAmountView {
+    func display(feeAmount: String, description: String, isPositive: Bool) {
+        object?.display(feeAmount: feeAmount, description: description, isPositive: isPositive)
+    }
+}
+
+extension WeakRef: ConvertedAmountView where T: ConvertedAmountView {
     func display(convertedAmount: String) {
         object?.display(convertedAmount: convertedAmount)
     }
+}
 
+extension WeakRef: ConvertorPresantableView where T: ConvertorPresantableView {
     func display(isLoading: Bool) {
         object?.display(isLoading: isLoading)
     }
@@ -116,14 +130,23 @@ extension WeakRef: ConvertorPresantableView where T: ConvertorPresantableView {
     func display(targetBalanceAmount: String, currency: String) {
         object?.display(targetBalanceAmount: targetBalanceAmount, currency: currency)
     }
-
-    func display(feeAmount: String, description: String, isPositive: Bool) {
-        object?.display(feeAmount: feeAmount, description: description, isPositive: isPositive)
-    }
 }
 
 extension WeakRef: RatesFetcherErrorView where T: RatesFetcherErrorView {
     func display(errorMessage: String) {
         object?.display(errorMessage: errorMessage)
+    }
+}
+
+private class ErrorHandlerAdapter {
+    
+    var convertedView: ConvertedAmountView?
+    var feeAmountView: FeeAmountView?
+    var errorPresenter: RatesFetcherErrorPresenter?
+    
+    func handleError(_ error: ApiRequest.Error) {
+        errorPresenter?.show(error: error)
+        convertedView?.display(convertedAmount: "0")
+        feeAmountView?.display(feeAmount: "Can't calculate fee amount", description: "", isPositive: true)
     }
 }

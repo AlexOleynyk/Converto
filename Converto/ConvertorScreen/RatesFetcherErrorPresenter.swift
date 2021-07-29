@@ -4,14 +4,14 @@ protocol RatesFetcherErrorView {
 
 final class RatesFetcherErrorPresenter {
 
-    var erorrView: RatesFetcherErrorView?
+    var errorView: RatesFetcherErrorView?
     
     func show(error: ApiRequest.Error) {
         switch error {
         case .connectivity:
-            erorrView?.display(errorMessage: "Can't connect to network")
+            errorView?.display(errorMessage: "Can't connect to network")
         case .decodingFailure:
-            erorrView?.display(errorMessage: "Something went wrong")
+            errorView?.display(errorMessage: "Something went wrong")
         }
     }
 }

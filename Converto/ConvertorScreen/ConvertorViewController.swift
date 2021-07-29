@@ -112,7 +112,7 @@ extension ConvertorViewController: ConvertorPresantableView {
 
 extension ConvertorViewController: RatesFetcherErrorView {
     func display(errorMessage: String) {
-        let alert = UIAlertController(title: "Erorr", message: errorMessage, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
         present(alert, animated: true)
     }

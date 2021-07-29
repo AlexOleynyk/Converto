@@ -1,13 +1,19 @@
 import Foundation
 import ConvertoDomain
 
-protocol ConvertorPresantableView {
+protocol ConvertedAmountView {
     func display(convertedAmount: String)
+}
+
+protocol FeeAmountView {
+    func display(feeAmount: String, description: String, isPositive: Bool)
+}
+
+protocol ConvertorPresantableView: ConvertedAmountView, FeeAmountView {
     func display(isLoading: Bool)
     func display(buttonIsEnabled: Bool)
     func display(sourceBalanceAmount: String, currency: String)
     func display(targetBalanceAmount: String, currency: String)
-    func display(feeAmount: String, description: String, isPositive: Bool)
 }
 
 final class ConvertorPresenter {
