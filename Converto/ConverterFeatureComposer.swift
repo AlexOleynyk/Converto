@@ -17,6 +17,9 @@ final class ConverterFeatureComposer {
         let decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
 
         let controller = ConvertorViewController(decimalFieldController: decimalFieldController)
+        
+        let errorPresenter = RatesFetcherErrorPresenter()
+        errorPresenter.erorrView = WeakRef(controller)
 
         let presenter = ConvertorPresenter(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
@@ -34,7 +37,10 @@ final class ConverterFeatureComposer {
             ),
             getExchangedAmountUseCase: RateBasedGetExchangedAmountUseCase(
                 exchangeRateFetcher: CachingExchangeRateFetcherDecorator(
-                    decoratee: RemoteRateFetcher(request: ApiRequest())
+                    decoratee: RemoteRateFetcher(
+                        request: ApiRequest(),
+                        errorHandler: errorPresenter.show
+                    )
                 )
             ),
             decimalFormatter: decimalFormatter
@@ -82,7 +88,7 @@ final class ConverterFeatureComposer {
             }
         }
         rootController.present(
-            UINavigationController(rootViewController: balanceSelectionController),
+            UINavigationController(rootViewController: makeConvertorViewController()),
             animated: true
         )
     }
@@ -111,5 +117,11 @@ extension WeakRef: ConvertorPresantableView where T: ConvertorPresantableView {
 
     func display(feeAmount: String, description: String, isPositive: Bool) {
         object?.display(feeAmount: feeAmount, description: description, isPositive: isPositive)
+    }
+}
+
+extension WeakRef: RatesFetcherErrorView where T: RatesFetcherErrorView {
+    func display(errorMessage: String) {
+        object?.display(errorMessage: errorMessage)
     }
 }

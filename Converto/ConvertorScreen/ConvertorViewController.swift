@@ -47,10 +47,14 @@ final class ConvertorViewController: UIViewController {
 
         convertorView.feeView.iconView.image = Asset.Icons.feeCommission.image
 
-        convertorView.sourceMoneyField.moneyField.inputField.addTarget(self, action: #selector(onSourceAmountChange), for: .editingChanged)
-        convertorView.convertButton.addTarget(self, action: #selector(onEchangeButtontap), for: .primaryActionTriggered)
-        convertorView.sourceMoneyField.moneyField.addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
-        convertorView.targetMoneyField.moneyField.addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
+        convertorView.sourceMoneyField.moneyField.inputField
+            .addTarget(self, action: #selector(onSourceAmountChange), for: .editingChanged)
+        convertorView.convertButton
+            .addTarget(self, action: #selector(onEchangeButtontap), for: .primaryActionTriggered)
+        convertorView.sourceMoneyField.moneyField
+            .addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
+        convertorView.targetMoneyField.moneyField
+            .addTarget(self, action: #selector(onCurrencySelectionTap(_:)), for: .touchUpInside)
     }
 
     @objc private func onEchangeButtontap() {
@@ -103,6 +107,14 @@ extension ConvertorViewController: ConvertorPresantableView {
             convertorView.feeView.iconView.tintColor = Asset.Colors.green500.color
             convertorView.feeView.titleLabel.text = description
         }
+    }
+}
+
+extension ConvertorViewController: RatesFetcherErrorView {
+    func display(errorMessage: String) {
+        let alert = UIAlertController(title: "Erorr", message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
+        present(alert, animated: true)
     }
 }
 
