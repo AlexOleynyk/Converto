@@ -7,7 +7,7 @@ let package = Package(
     products: [
         .library(
             name: "ConvertoKit",
-            targets: ["ConvertoKit"]),
+            targets: ["ConvertoKit"])
     ],
     dependencies: [
         .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing", .upToNextMajor(from: "1.8.2"))

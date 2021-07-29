@@ -13,7 +13,7 @@ final class MoneyCardViewSnapshotTests: XCTestCase {
         assertSnapshot(matching: ContainerView(cardView), as: .image(size: ContainerView.defaultSize, traits: .lightMode))
         assertSnapshot(matching: ContainerView(cardView), as: .image(size: ContainerView.defaultSize, traits: .darkMode))
     }
-    
+
     func testMoneyCardView_selected() {
         cardView.isSelected = true
         assertSnapshot(matching: ContainerView(cardView), as: .image(size: ContainerView.defaultSize, traits: .lightMode))

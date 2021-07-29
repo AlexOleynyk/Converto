@@ -2,22 +2,22 @@ import UIKit
 import ConvertoDomain
 
 final class ConverterFeatureComposer {
-    
+
     var rootController: UIViewController {
         convertorViewController
     }
-    
+
     private lazy var convertorViewController = makeConvertorViewController()
     private lazy var userWalletRepository: WalletRepository & UserBalanceFetcher = UserWalletRepository()
-    
+
     private func makeConvertorViewController() -> ConvertorViewController {
         let countFetcher = UpdatableCountFetcher()
         let increaseTargetBalanceCountOnSuccess: (ExchangeMoneyCommand, Bool) -> Void = { if $1 { countFetcher.increaseCount(for: $0.targetBalance) } }
         let decimalFormatter = DecimalTwoWayFormatter()
         let decimalFieldController = FormattedTextFieldController(twoWayFormatter: decimalFormatter)
-        
+
         let controller = ConvertorViewController(decimalFieldController: decimalFieldController)
-        
+
         let presenter = ConvertorPresenter(
             getBalanceUseCase: GetUserBalancesUseCase(userBalanceFetcher: userWalletRepository),
             getFeeUseCase: CountBasedDecoratorGetExchangeFeeUseCase(
@@ -49,10 +49,10 @@ final class ConverterFeatureComposer {
                 targetBalance: targetBalance
             )
         }
-        
+
         return controller
     }
-    
+
     private func makeBalanceSelectionViewContorller(excludedBalance: Balance) -> BalanceSelectionViewContorller {
         BalanceSelectionViewContorller(
             getUserWalleUseCase: GetUserBalancesForSelectionUseCaseImpl(
@@ -63,7 +63,7 @@ final class ConverterFeatureComposer {
             )
         )
     }
-    
+
     private func routeToBalanceSelection(
         with type: ConvertorViewController.CurrencySelectionType,
         sourceBalance: Balance,
@@ -92,23 +92,23 @@ extension WeakRef: ConvertorPresantableView where T: ConvertorPresantableView {
     func display(convertedAmount: String) {
         object?.display(convertedAmount: convertedAmount)
     }
-    
+
     func display(isLoading: Bool) {
         object?.display(isLoading: isLoading)
     }
-    
+
     func display(buttonIsEnabled: Bool) {
         object?.display(buttonIsEnabled: buttonIsEnabled)
     }
-    
+
     func display(sourceBalanceAmount: String, currency: String) {
         object?.display(sourceBalanceAmount: sourceBalanceAmount, currency: currency)
     }
-    
+
     func display(targetBalanceAmount: String, currency: String) {
         object?.display(targetBalanceAmount: targetBalanceAmount, currency: currency)
     }
-    
+
     func display(feeAmount: String, description: String, isPositive: Bool) {
         object?.display(feeAmount: feeAmount, description: description, isPositive: isPositive)
     }

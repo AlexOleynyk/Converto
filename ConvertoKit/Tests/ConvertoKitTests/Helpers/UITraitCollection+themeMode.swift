@@ -8,7 +8,7 @@ public extension UITraitCollection {
             return .init()
         }
     }
-    
+
     static var lightMode: UITraitCollection {
         if #available(iOS 12.0, *) {
             return .init(userInterfaceStyle: .light)

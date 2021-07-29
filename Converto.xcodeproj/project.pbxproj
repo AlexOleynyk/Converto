@@ -207,7 +207,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2900350F26AE8E370068DC90 /* Build configuration list for PBXNativeTarget "Converto" */;
 			buildPhases = (
-				2900351526AEA0880068DC90 /* ShellScript */,
+				296B4A7D26B27E6300ACC522 /* ShellScript */,
+				2900351526AEA0880068DC90 /* Swiftgen */,
 				290034F726AE8E360068DC90 /* Sources */,
 				290034F826AE8E360068DC90 /* Frameworks */,
 				290034F926AE8E360068DC90 /* Resources */,
@@ -270,7 +271,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2900351526AEA0880068DC90 /* ShellScript */ = {
+		2900351526AEA0880068DC90 /* Swiftgen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftgen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PROJECT_DIR}/BuildTools/swiftgen/bin/swiftgen config run --config ${PROJECT_DIR}/BuildTools/ConvertoKit-swiftgen.yml\n";
+		};
+		296B4A7D26B27E6300ACC522 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -285,7 +304,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PROJECT_DIR}/BuildTools/swiftgen/bin/swiftgen config run --config ${PROJECT_DIR}/BuildTools/ConvertoKit-swiftgen.yml\n";
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

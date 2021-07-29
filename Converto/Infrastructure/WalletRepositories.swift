@@ -14,13 +14,13 @@ final class UserWalletRepository: WalletRepository, UserBalanceFetcher {
             completion(true)
         }
     }
-    
+
     func fetchWallet(completion: @escaping (Wallet) -> Void) {
         simulateNetworkDelay {
             completion(self.mockWallet)
         }
     }
-    
+
     func get(currency: Currency, completion: @escaping (Balance?) -> Void) {
         simulateNetworkDelay {
             completion(self.mockWallet.balances.first(where: { $0.money.currency == currency }))
@@ -39,32 +39,31 @@ final class BankWalletRepository: WalletRepository {
         bankWallet = wallet
         completion(true)
     }
-    
+
     func fetchWallet(completion: @escaping (Wallet) -> Void) {
         completion(bankWallet)
     }
 }
 
-
 final class ExcludingWalletRepositoryDecorator: WalletRepository {
-    
+
     private let decoratee: WalletRepository
     private let exculedBalance: Balance
-    
+
     init(decoratee: WalletRepository, exculedBalance: Balance) {
         self.decoratee = decoratee
         self.exculedBalance = exculedBalance
     }
-    
+
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
         decoratee.updateWallet(wallet, completion: completion)
     }
-    
+
     func fetchWallet(completion: @escaping (Wallet) -> Void) {
         decoratee.fetchWallet(completion: { [weak self] wallet in
-            let newWallet = Wallet(balances: wallet.balances.filter { $0.id != self?.exculedBalance.id } )
+            let newWallet = Wallet(balances: wallet.balances.filter { $0.id != self?.exculedBalance.id })
             completion(newWallet)
         })
     }
-    
+
 }

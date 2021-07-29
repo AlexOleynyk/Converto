@@ -10,10 +10,10 @@ public protocol WalletRepository {
 }
 
 public class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
-    
+
     private let userWalletRepository: WalletRepository
     private let bankWalletRepository: WalletRepository
-    
+
     public init(
         userWalletRepository: WalletRepository,
         bankWalletRepository: WalletRepository
@@ -31,26 +31,25 @@ public class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
             var userWallet = $0
             userWallet.withdrow(from: command.sourceBalance, amount: command.amount + command.fee)
             userWallet.deposit(from: command.targetBalance, amount: command.convertedAmount)
-            
+
             self?.userWalletRepository.updateWallet(userWallet) {
                 result = result && $0
                 group.leave()
-                
+
             }
         }
-        
+
         group.enter()
         bankWalletRepository.fetchWallet { [weak self] in
             var bankWallet = $0
             bankWallet.deposit(from: command.targetBalance, amount: command.fee)
-            
-            
+
             self?.bankWalletRepository.updateWallet(bankWallet) {
                 result = result && $0
                 group.leave()
             }
         }
-        
+
         group.notify(queue: DispatchQueue.main) {
             completion(result)
         }
@@ -58,19 +57,19 @@ public class ExchangeMoneyUseCaseImpl: ExchangeMoneyUseCase {
 }
 
 public struct ExchangeMoneyCommand {
-    
+
     public enum Error: Swift.Error {
         case notEnoughBalance
         case notEnoughBalanceIncludingBalance
         case zeroAmount
     }
- 
+
     public let sourceBalance: Balance
     public let targetBalance: Balance
     public let amount: Decimal
     public let convertedAmount: Decimal
     public let fee: Decimal
-    
+
     private init(
         sourceBalance: Balance,
         targetBalance: Balance,
@@ -84,7 +83,7 @@ public struct ExchangeMoneyCommand {
         self.convertedAmount = convertedAmount
         self.fee = fee
     }
-    
+
     public static func make(
         sourceBalance: Balance,
         targetBalance: Balance,
@@ -98,11 +97,11 @@ public struct ExchangeMoneyCommand {
         guard sourceBalance.money.amount >= amount else {
             return .failure(.notEnoughBalance)
         }
-        
+
         guard sourceBalance.money.amount >= amount + fee else {
             return .failure(.notEnoughBalanceIncludingBalance)
         }
-        
+
         return .success(ExchangeMoneyCommand(
             sourceBalance: sourceBalance,
             targetBalance: targetBalance,

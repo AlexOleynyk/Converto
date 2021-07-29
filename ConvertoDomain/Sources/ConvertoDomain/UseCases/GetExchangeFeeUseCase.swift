@@ -9,11 +9,11 @@ public protocol TransactionCountFetcher {
 }
 
 public final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCase {
-    
+
     private let countFetcher: TransactionCountFetcher
     private let freeLimitCount: Int
     private let decoratee: GetExchangeFeeUseCase
-    
+
     public init(
         countFetcher: TransactionCountFetcher,
         freeLimitCount: Int,
@@ -23,7 +23,7 @@ public final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCa
         self.freeLimitCount = freeLimitCount
         self.decoratee = decoratee
     }
-    
+
     public func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
         countFetcher.count(for: targetBalance) { [weak self] count in
             guard let self = self else { return }
@@ -34,13 +34,13 @@ public final class CountBasedDecoratorGetExchangeFeeUseCase: GetExchangeFeeUseCa
 }
 
 public final class PercentBasedGetExchangeFeeUseCase: GetExchangeFeeUseCase {
-    
+
     private let percent: Decimal
-    
+
     public init(percent: Decimal) {
         self.percent = percent
     }
-    
+
     public func get(sourceBalance: Balance, targetBalance: Balance, amount: Decimal, completion: @escaping (Money) -> Void) {
         var initialValue = amount * percent
         var result: Decimal = 0

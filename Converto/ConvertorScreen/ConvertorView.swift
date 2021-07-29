@@ -7,21 +7,21 @@ final class ConvertorView: UIView {
         $0.layer.borderColor = Asset.Colors.blue200.color.cgColor
         $0.layer.borderWidth = 2
     }
-    
+
     let sourceMoneyField = TitledMoneyField()
     let targetMoneyField = setup(TitledMoneyField()) {
         $0.moneyField.inputField.isUserInteractionEnabled = false
     }
     let feeView = TitleView()
-    
+
     let convertButton = PrimaryButton()
     private var bottomConstraint: NSLayoutConstraint!
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         backgroundColor = Asset.Colors.background.color
-        
+
         let stack = setup(UIStackView(arrangedSubviews: [
             sourceMoneyField,
             makeSeparator(),
@@ -31,42 +31,42 @@ final class ConvertorView: UIView {
         ])) {
             $0.axis = .vertical
         }
-        
+
         container.addSubview(stack, constraints: [
             stack.topAnchor.constraint(equalTo: container.topAnchor),
             stack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             stack.bottomAnchor.constraint(equalTo: container.bottomAnchor)
         ])
-        
+
         addSubview(container, constraints: [
             container.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
             container.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             container.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
-        
+
         bottomConstraint = convertButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20)
         addSubview(convertButton, constraints: [
             convertButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             convertButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             bottomConstraint
         ])
-        
+
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap)))
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         container.layer.borderColor = Asset.Colors.blue200.color.cgColor
     }
-    
+
     private func makeSeparator() -> UIView {
         setup(UIView()) {
             $0.backgroundColor = Asset.Colors.blue200.color
             $0.addConstraint($0.heightAnchor.constraint(equalToConstant: 2))
         }
     }
-    
+
     private func wrappedView(_ view: UIView, insets: UIEdgeInsets) -> UIView {
         let wrapper = UIView()
         wrapper.addSubview(view, constraints: [
@@ -77,11 +77,11 @@ final class ConvertorView: UIView {
         ])
         return wrapper
     }
-    
+
     @objc func onTap() {
             endEditing(true)
     }
-    
+
     func adjustForKeyboardHeight(height: CGFloat) {
         if height == 0 {
             bottomConstraint.constant = -20
@@ -92,7 +92,7 @@ final class ConvertorView: UIView {
             self.layoutIfNeeded()
         }
     }
-    
+
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")

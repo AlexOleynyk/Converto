@@ -5,13 +5,13 @@ public protocol GetUserBalancesForSelectionUseCase {
 }
 
 public class GetUserBalancesForSelectionUseCaseImpl: GetUserBalancesForSelectionUseCase {
-    
+
     private let userWalletRepository: WalletRepository
-    
+
     public init(userWalletRepository: WalletRepository) {
         self.userWalletRepository = userWalletRepository
     }
-    
+
     public func get(completion: @escaping ([Balance]) -> Void) {
         userWalletRepository.fetchWallet {
             let sortedBalances = $0.balances

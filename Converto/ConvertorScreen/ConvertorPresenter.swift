@@ -12,24 +12,24 @@ protocol ConvertorPresantableView {
 
 final class ConvertorPresenter {
     var presantableView: ConvertorPresantableView?
-    
+
     var sourceBalance: Balance? {
         didSet { updateSourceBalance() }
     }
     var targetBalance: Balance? {
         didSet { updateTargetBalance() }
     }
-    
+
     private let getBalanceUseCase: GetUserBalancesUseCase
     private let getFeeUseCase: GetExchangeFeeUseCase
     private let exchangeMoneyUseCase: ExchangeMoneyUseCase
     private let getExchangedAmountUseCase: GetExchangedAmountUseCase
-    
+
     private var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
     private let decimalFormatter: DecimalTwoWayFormatter
-    
+
     private var enteredAmount: Decimal = 0
-    
+
     init(
         getBalanceUseCase: GetUserBalancesUseCase,
         getFeeUseCase: GetExchangeFeeUseCase,
@@ -43,7 +43,7 @@ final class ConvertorPresenter {
         self.getExchangedAmountUseCase = getExchangedAmountUseCase
         self.decimalFormatter = decimalFormatter
     }
-    
+
     func updateBalances() {
         presantableView?.display(isLoading: true)
         getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? .init(id: 2, code: "EUR")) { [weak self] in
@@ -54,10 +54,10 @@ final class ConvertorPresenter {
             self?.targetBalance = $0
             self?.presantableView?.display(isLoading: false)
         }
-        
+
         updateFees(amount: enteredAmount, convertedAmount: 0)
     }
-    
+
     func exchangeMoney() {
         if let command = try? exchangeMoneyCommand?.get() {
             presantableView?.display(isLoading: true)
@@ -69,12 +69,12 @@ final class ConvertorPresenter {
             }
         }
     }
-    
+
     func onSourceAmountChange(amount: String) {
         enteredAmount = decimalFormatter.fromString(amount) ?? 0
         updateExchangedAmount()
     }
-    
+
     private func updateSourceBalance() {
         presantableView?.display(
             sourceBalanceAmount: "Available: \(sourceBalance?.money.amount ?? 0)",
@@ -82,30 +82,30 @@ final class ConvertorPresenter {
         )
         updateExchangedAmount()
     }
-    
+
     private func updateTargetBalance() {
         presantableView?.display(
-            targetBalanceAmount:  "Available: \(targetBalance?.money.amount ?? 0)",
+            targetBalanceAmount: "Available: \(targetBalance?.money.amount ?? 0)",
             currency: targetBalance?.money.currency.code ?? ""
         )
         updateExchangedAmount()
     }
-    
+
     private func updateFees(amount: Decimal, convertedAmount: Decimal) {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
-            
+
             getFeeUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: amount) { [weak self] fees in
                 self?.presantableView?.display(
                     feeAmount: "\(fees.amount) \(fees.currency.code)",
                     description: fees.amount > 0 ? "Commission fee" : "No fee commission",
                     isPositive: fees.amount > 0
                 )
-                
+
                 self?.checkForExchangePossibility(amount: amount, convertedAmount: convertedAmount, fee: fees.amount)
             }
         }
     }
-    
+
     private func checkForExchangePossibility(
         amount: Decimal,
         convertedAmount: Decimal,
@@ -122,13 +122,13 @@ final class ConvertorPresenter {
             presantableView?.display(buttonIsEnabled: (try? exchangeMoneyCommand?.get()) != nil)
         }
     }
-    
+
     private func updateExchangedAmount() {
         if let sourceBalance = sourceBalance, let targetBalance = targetBalance {
             getExchangedAmountUseCase.get(sourceBalance: sourceBalance, targetBalance: targetBalance, amount: enteredAmount) { [weak self] in
                 self?.presantableView?.display(convertedAmount: self?.decimalFormatter.toString($0.amount) ?? "")
                 self?.updateFees(amount: self?.enteredAmount ?? 0, convertedAmount: $0.amount)
-                
+
             }
         }
     }
