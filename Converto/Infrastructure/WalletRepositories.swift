@@ -3,9 +3,9 @@ import ConvertoDomain
 
 final class UserWalletRepository: WalletRepository, UserBalanceFetcher {
     private var mockWallet = Wallet(balances: [
-        Balance(id: 1, money: Money(amount: 0, currency: Currency(id: 1, code: "USD"))),
-        Balance(id: 2, money: Money(amount: 1000, currency: Currency(id: 2, code: "EUR"))),
-        Balance(id: 3, money: Money(amount: 0, currency: Currency(id: 3, code: "JPY")))
+        Balance(id: 1, money: Money(amount: 0, currency: .makeUsd())),
+        Balance(id: 2, money: Money(amount: 1000, currency: .makeEur())),
+        Balance(id: 3, money: Money(amount: 0, currency: .makeJpy()))
     ])
 
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
@@ -30,9 +30,9 @@ final class UserWalletRepository: WalletRepository, UserBalanceFetcher {
 
 final class BankWalletRepository: WalletRepository {
     private var bankWallet = Wallet(balances: [
-        Balance(id: 1, money: Money(amount: 0, currency: Currency(id: 1, code: "USD"))),
-        Balance(id: 2, money: Money(amount: 0, currency: Currency(id: 2, code: "EUR"))),
-        Balance(id: 3, money: Money(amount: 0, currency: Currency(id: 3, code: "JPY")))
+        Balance(id: 1, money: Money(amount: 0, currency: .makeUsd())),
+        Balance(id: 2, money: Money(amount: 0, currency: .makeEur())),
+        Balance(id: 3, money: Money(amount: 0, currency: .makeJpy()))
     ])
 
     func updateWallet(_ wallet: Wallet, completion: @escaping (Bool) -> Void) {
@@ -65,5 +65,4 @@ final class ExcludingWalletRepositoryDecorator: WalletRepository {
             completion(newWallet)
         })
     }
-
 }

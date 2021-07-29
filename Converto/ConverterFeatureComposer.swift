@@ -43,7 +43,9 @@ final class ConverterFeatureComposer {
                     )
                 )
             ),
-            decimalFormatter: decimalFormatter
+            decimalFormatter: decimalFormatter,
+            inititalSourceCurrency: .makeEur(),
+            inititalTargetCurrency: .makeUsd()
         )
         controller.presenter = presenter
         presenter.presantableView = WeakRef(controller)

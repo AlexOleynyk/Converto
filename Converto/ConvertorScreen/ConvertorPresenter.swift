@@ -24,10 +24,11 @@ final class ConvertorPresenter {
     private let getFeeUseCase: GetExchangeFeeUseCase
     private let exchangeMoneyUseCase: ExchangeMoneyUseCase
     private let getExchangedAmountUseCase: GetExchangedAmountUseCase
-
-    private var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
     private let decimalFormatter: DecimalTwoWayFormatter
-
+    private let inititalSourceCurrency: Currency
+    private let inititalTargetCurrency: Currency
+    
+    private var exchangeMoneyCommand: Result<ExchangeMoneyCommand, ExchangeMoneyCommand.Error>?
     private var enteredAmount: Decimal = 0
 
     init(
@@ -35,22 +36,26 @@ final class ConvertorPresenter {
         getFeeUseCase: GetExchangeFeeUseCase,
         exchangeMoneyUseCase: ExchangeMoneyUseCase,
         getExchangedAmountUseCase: GetExchangedAmountUseCase,
-        decimalFormatter: DecimalTwoWayFormatter
+        decimalFormatter: DecimalTwoWayFormatter,
+        inititalSourceCurrency: Currency,
+        inititalTargetCurrency: Currency
     ) {
         self.getBalanceUseCase = getBalanceUseCase
         self.getFeeUseCase = getFeeUseCase
         self.exchangeMoneyUseCase = exchangeMoneyUseCase
         self.getExchangedAmountUseCase = getExchangedAmountUseCase
         self.decimalFormatter = decimalFormatter
+        self.inititalSourceCurrency = inititalSourceCurrency
+        self.inititalTargetCurrency = inititalTargetCurrency
     }
 
     func updateBalances() {
         presantableView?.display(isLoading: true)
-        getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? .init(id: 2, code: "EUR")) { [weak self] in
+        getBalanceUseCase.get(currency: sourceBalance?.money.currency ?? inititalSourceCurrency) { [weak self] in
             self?.sourceBalance = $0
             self?.presantableView?.display(isLoading: false)
         }
-        getBalanceUseCase.get(currency: targetBalance?.money.currency ?? .init(id: 1, code: "USD")) { [weak self] in
+        getBalanceUseCase.get(currency: targetBalance?.money.currency ?? inititalTargetCurrency) { [weak self] in
             self?.targetBalance = $0
             self?.presantableView?.display(isLoading: false)
         }

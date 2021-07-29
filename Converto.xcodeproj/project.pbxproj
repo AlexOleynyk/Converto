@@ -28,6 +28,7 @@
 		296B4A8026B2854E00ACC522 /* ApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B4A7F26B2854E00ACC522 /* ApiRequest.swift */; };
 		296B4A8226B28F1800ACC522 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B4A8126B28F1800ACC522 /* Optional+Extension.swift */; };
 		296B4A8426B2978C00ACC522 /* RatesFetcherErrorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B4A8326B2978C00ACC522 /* RatesFetcherErrorPresenter.swift */; };
+		296B4A8626B2A0B900ACC522 /* SupportedCurrencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B4A8526B2A0B900ACC522 /* SupportedCurrencies.swift */; };
 		2996676526B1437900E0549D /* KeyboardObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676426B1437900E0549D /* KeyboardObserving.swift */; };
 		2996676D26B14C9500E0549D /* DecimalTwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */; };
 		2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2996676926B14C9500E0549D /* TwoWayFormatter.swift */; };
@@ -61,6 +62,7 @@
 		296B4A7F26B2854E00ACC522 /* ApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRequest.swift; sourceTree = "<group>"; };
 		296B4A8126B28F1800ACC522 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		296B4A8326B2978C00ACC522 /* RatesFetcherErrorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatesFetcherErrorPresenter.swift; sourceTree = "<group>"; };
+		296B4A8526B2A0B900ACC522 /* SupportedCurrencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedCurrencies.swift; sourceTree = "<group>"; };
 		2996676426B1437900E0549D /* KeyboardObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserving.swift; sourceTree = "<group>"; };
 		2996676826B14C9500E0549D /* DecimalTwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalTwoWayFormatter.swift; sourceTree = "<group>"; };
 		2996676926B14C9500E0549D /* TwoWayFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoWayFormatter.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				295E113C26B18D40005E57C5 /* UpdatableCountFetcher.swift */,
 				295E114026B18E7F005E57C5 /* CachingExchangeRateFetcherDecorator.swift */,
 				295E114226B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift */,
+				296B4A8526B2A0B900ACC522 /* SupportedCurrencies.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				295E114326B18E97005E57C5 /* ObservingExchangeMoneyUseCaseDecorator.swift in Sources */,
 				296B4A8226B28F1800ACC522 /* Optional+Extension.swift in Sources */,
 				2996676E26B14C9500E0549D /* TwoWayFormatter.swift in Sources */,
+				296B4A8626B2A0B900ACC522 /* SupportedCurrencies.swift in Sources */,
 				295E113B26B18D05005E57C5 /* WalletRepositories.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
